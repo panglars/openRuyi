@@ -6,7 +6,7 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 Name:           libressl
-Version:        4.1.1
+Version:        4.2.0
 Release:        %autorelease
 Summary:        An SSL/TLS protocol implementation
 License:        OpenSSL
