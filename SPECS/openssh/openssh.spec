@@ -114,6 +114,7 @@ install openssh-clients, openssh-server, or both.
 %package        clients
 Summary:        An open source SSH client applications
 Requires:       openssh = %{version}-%{release}
+%systemd_requires
 #Requires:       crypto-policies
 
 %description    clients
@@ -135,7 +136,8 @@ Summary:        An open source SSH server daemon
 Requires:       openssh = %{version}-%{release}
 Requires:       pam
 #Requires:       crypto-policies
-
+Requires(pre):  systemd-sysusers
+%systemd_requires
 %description    server
 OpenSSH is a free version of SSH (Secure SHell), a program for logging
 into and executing commands on a remote machine. This package contains
@@ -216,7 +218,7 @@ rm -f $RPM_BUILD_ROOT/etc/profile.d/gnome-ssh-askpass.*
 
 
 %pre server
-%sysusers_create_package openssh-server %{SOURCE12}
+%sysusers_create_package %{name} %{SOURCE12}
 
 %post server
 %systemd_post sshd.service sshd.socket
