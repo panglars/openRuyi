@@ -89,8 +89,6 @@ if [ -e /usr/lib/systemd/system/mandb.timer ]; then
         systemctl -q disable man-db.timer >/dev/null 2>&1 || :
     fi
 fi
-%service_add_pre man-db.service man-db.timer
-
 %post
 # set up the alternatives files
 %{_sbindir}/update-alternatives --install %{_bindir}/man man %{_bindir}/man.%{name} 300 \
@@ -103,13 +101,13 @@ fi
 
 # clear the old cache
 %{__rm} -rf %{cache}/* >/dev/null 2>&1 || :
-%service_add_post man-db.service man-db.timer
+%systemd_post man-db.service man-db.timer
 
 %preun
 if [ $1 -eq 0 ]; then
     %{_sbindir}/update-alternatives --remove man %{_bindir}/man.%{name} >/dev/null 2>&1 || :
 fi
-%service_del_preun man-db.service man-db.timer
+%systemd_preun man-db.service man-db.timer
 
 %postun
 if [ $1 -ge 1 ]; then
@@ -117,7 +115,7 @@ if [ $1 -ge 1 ]; then
         %{_sbindir}/update-alternatives --set man %{_bindir}/man.%{name} >/dev/null 2>&1 || :
     fi
 fi
-%service_del_postun man-db.service man-db.timer
+%systemd_postun man-db.service man-db.timer
 
 %check -p
 export LANG=C
