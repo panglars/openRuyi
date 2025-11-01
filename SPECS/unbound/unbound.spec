@@ -220,6 +220,9 @@ echo ".so man8/unbound-control.8" > %{buildroot}/%{_mandir}/man8/unbound-control
 rm %{buildroot}%{_libdir}/*.la
 rm %{buildroot}%{python3_sitearch}/*.la
 
+%pre
+%sysusers_create_package unbound %{SOURCE17}
+
 %preun
 %systemd_preun unbound.service
 %systemd_preun unbound-keygen.service
