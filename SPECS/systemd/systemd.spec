@@ -37,7 +37,7 @@
 # Sorry, no docs yet
 %bcond docs 0
 # If we want to Unified Kernel Image then change this
-%bcond ukify 0
+%bcond ukify 1
 # We don't want to run valgrind tests in CI
 # Or we just don't want tests at all
 %bcond valgrind 0
@@ -99,6 +99,7 @@ BuildOption(conf):  -Dlibfido2=%{?with_fido2:enabled}%{!?with_fido2:disabled}
 BuildOption(conf):  -Defi=true
 BuildOption(conf):  -Dbootloader=enabled
 BuildOption(conf):  -Dtpm2=%{?with_tpm2:enabled}%{!?with_tpm2:disabled}
+BuildOption(conf):  -Dukify=%{?with_ukify:enabled}%{!?with_ukify:disabled}
 BuildOption(conf):  -Dhwdb=true
 BuildOption(conf):  -Dsysusers=true
 # Enable only if we really want it
@@ -185,7 +186,7 @@ BuildRequires:  gperf
 BuildRequires:  gawk
 %if %{with ukify}
 BuildRequires:  python3dist(pefile)
-BuildRequires:  python3dist(pillow)
+# BuildRequires:  python3dist(pillow)
 %endif
 BuildRequires:  python3dist(pyelftools)
 BuildRequires:  libseccomp-devel
@@ -1151,6 +1152,8 @@ fi
 %if %{with ukify}
 %files ukify
 %{_bindir}/ukify
+%{_prefix}/lib/kernel/install.d/60-ukify.install
+%{_prefix}/lib/kernel/uki.conf
 %{_prefix}/lib/systemd/ukify
 %if %{with docs}
 %{_mandir}/man1/ukify.1.gz
