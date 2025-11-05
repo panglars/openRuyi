@@ -608,6 +608,9 @@ exit 0
 %{slibdir}/librt.so.1
 %{slibdir}/libthread_db.so.1
 %{slibdir}/libutil.so.1
+%ifarch x86_64
+%{_libdir}/libmvec.so.1
+%endif
 %dir %attr(0700,root,root) /var/cache/ldconfig
 %{rootsbindir}/ldconfig
 %{_bindir}/gencat
@@ -671,6 +674,9 @@ exit 0
 %{_libdir}/libnss_hesiod.so
 %{_libdir}/libresolv.so
 %{_libdir}/libthread_db.so
+%ifarch x86_64
+/usr/lib64/libmvec.so
+%endif
 # These static libraries are needed even for shared builds
 %{_libdir}/libc_nonshared.a
 %{_libdir}/libdl.a
@@ -687,7 +693,10 @@ exit 0
 %{_libdir}/libc.a
 %{_libdir}/libm.a
 %{_libdir}/libresolv.a
-
+%ifarch x86_64
+%{_libdir}/libm-%{version}.a
+%{_libdir}/libmvec.a
+%endif
 
 %files info
 %defattr(-,root,root)
