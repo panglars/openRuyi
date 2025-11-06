@@ -6,6 +6,13 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %define __os_install_post %{nil}
+
+%ifarch riscv64
+%global rust_arch riscv64gc
+%else
+%global rust_arch %{_arch}
+%endif
+
 Name:           rust-bin
 Version:        1.90.0
 Release:        %autorelease
@@ -15,7 +22,9 @@ Group:          Development/Languages/Rust
 URL:            https://forge.rust-lang.org/infra/other-installation-methods.html#standalone
 #!RemoteAsset
 Source0:        https://static.rust-lang.org/dist/rust-%{version}-riscv64gc-unknown-linux-gnu.tar.gz
-ExclusiveArch:  riscv64
+#!RemoteAsset
+Source1:        https://static.rust-lang.org/dist/rust-%{version}-x86_64-unknown-linux-gnu.tar.gz
+ExclusiveArch:  riscv64 x86_64
 
 BuildRequires:  bash, tar, gzip
 Provides:       rust = %{version}
@@ -30,12 +39,12 @@ want to install Rust for a development environment, you should install
 'rustup' instead.
 
 %prep
-tar xf %{SOURCE0} --strip-components=1
+tar xf %{_sourcedir}/rust-%{version}-%{rust_arch}-unknown-linux-gnu.tar.gz --strip-components=1
 
 %build
 
 %install
-./install.sh --prefix=%{buildroot}/%{_prefix} --components=rustc,cargo,rust-std-%{_arch}gc-unknown-linux-gnu
+./install.sh --prefix=%{buildroot}/%{_prefix} --components=rustc,cargo,rust-std-%{rust_arch}-unknown-linux-gnu
 mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}
 rm %{buildroot}%{_prefix}/lib/rustlib/install.log
 rm %{buildroot}%{_prefix}/lib/rustlib/manifest-*
@@ -55,6 +64,8 @@ rm %{buildroot}%{_prefix}/lib/rustlib/manifest-*
 %{_prefix}/libexec/*
 %{_prefix}/lib/rustlib
 %{_prefix}/lib/*.so
-
+%ifarch x86_64
+%{_prefix}/lib/libLLVM.so.*-rust-%{version}-stable
+%endif
 %changelog
 %{?autochangelog}
