@@ -64,8 +64,12 @@ autoreconf -fiv
 %{_mandir}/man1/pstree.1*
 %{_mandir}/man1/prtstat.1*
 %{_mandir}/man1/pslog.1*
+%ifarch x86_64
 %{_bindir}/peekfd
+%{_mandir}/man1/peekfd.1*
+%else
 %exclude %{_mandir}/man1/peekfd.1*
+%endif
 
 %changelog
 %{?autochangelog}
