@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -9,8 +10,8 @@ Version:        2.8.4
 Release:        %autorelease
 Summary:        Support Utilities for Kernel nfsd
 License:        GPL-2.0-or-later
-Group:          Productivity/Networking/NFS
 URL:            https://kernel.org/pub/linux/utils/nfs-utils/
+VCS:            git:git://git.linux-nfs.org/projects/steved/nfs-utils.git
 #!RemoteAsset
 Source0:        https://kernel.org/pub/linux/utils/nfs-utils/%{version}/nfs-utils-%{version}.tar.xz
 Source1:        sysconfig.nfs
@@ -63,18 +64,18 @@ Provides:       nfs-utils = %{version}
 %description -n nfs-kernel-server
 This package contains support for the kernel-based NFS server.
 
-%package -n     libnfsidmap1
+%package -n     nfsidmap
 Summary:        NFSv4 ID Mapping Library
 
-%description -n libnfsidmap1
+%description -n nfsidmap
 This library provides NFSv4 user/group name to ID mapping functionality.
 
-%package -n     libnfsidmap-devel
+%package -n     nfsidmap-devel
 Summary:        Development files for the NFSv4 ID Mapping Library
 Group:          Development/Libraries/C and C++
-Requires:       libnfsidmap1 = %{version}
+Requires:       nfsidmap = %{version}
 
-%description -n libnfsidmap-devel
+%description -n nfsidmap-devel
 This package contains header files for the NFSv4 ID Mapping Library.
 
 %conf -p
@@ -263,11 +264,11 @@ fi
 %config(noreplace) %{_localstatedir}/lib/nfs/etab
 %config(noreplace) %{_localstatedir}/lib/nfs/rmtab
 
-%files -n libnfsidmap1
+%files -n nfsidmap
 %{_libdir}/libnfsidmap.so.1*
 %{_libdir}/libnfsidmap/
 
-%files -n libnfsidmap-devel
+%files -n nfsidmap-devel
 %{_libdir}/libnfsidmap.so
 %{_includedir}/nfsidmap.h
 %{_includedir}/nfsidmap_plugin.h
