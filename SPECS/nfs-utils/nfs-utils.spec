@@ -21,19 +21,19 @@ Source4:        nfs.conf
 Source5:        nfs-kernel-server.tmpfiles
 BuildSystem:    autotools
 
-BuildOption(conf): --with-systemd
-BuildOption(conf): --enable-nfsv4
-BuildOption(conf): --enable-gss
-BuildOption(conf): --enable-svcgss
-BuildOption(conf): --enable-ipv6
-BuildOption(conf): --enable-nfsdcltrack
-BuildOption(conf): --enable-mount
-BuildOption(conf): --enable-libmount-mount
-BuildOption(conf): --enable-junction
-BuildOption(conf): --disable-static
-BuildOption(conf): --disable-sbin-override
-BuildOption(conf): --with-pluginpath=%{_libdir}/libnfsidmap
-BuildOption(conf): --enable-mountconfig
+BuildOption(conf):  --with-systemd
+BuildOption(conf):  --enable-nfsv4
+BuildOption(conf):  --enable-gss
+BuildOption(conf):  --enable-svcgss
+BuildOption(conf):  --enable-ipv6
+BuildOption(conf):  --enable-nfsdcltrack
+BuildOption(conf):  --enable-mount
+BuildOption(conf):  --enable-libmount-mount
+BuildOption(conf):  --enable-junction
+BuildOption(conf):  --disable-static
+BuildOption(conf):  --disable-sbin-override
+BuildOption(conf):  --with-pluginpath=%{_libdir}/libnfsidmap
+BuildOption(conf):  --enable-mountconfig
 
 BuildRequires:  e2fsprogs gcc-c++ libtool pkgconfig  sysuser-tools glibc-devel rpcgen
 BuildRequires:  pkgconfig(kdb) pkgconfig(krb5) pkgconfig(libcap) pkgconfig(libevent)
@@ -47,15 +47,15 @@ BuildRequires:  autoconf automake
 This package contains the NFS utilities. This is a metapackage that requires
 the NFS kernel server utilities.
 
-%package -n     nfs-client
+%package     -n nfs-client
 Summary:        Support Utilities for NFS Client
 Requires:       keyutils netcfg rpcbind system-user-nobody
-# Requires(pre):  permissions
 %sysusers_requires
+
 %description -n nfs-client
 This package contains common NFS utilities which are needed for an NFS client.
 
-%package -n     nfs-kernel-server
+%package     -n nfs-kernel-server
 Summary:        Support Utilities for Kernel NFS Server
 Requires:       netcfg nfs-client = %{version} rpcbind
 Requires:       (kmod(nfsd.ko) if kernel)
@@ -64,15 +64,14 @@ Provides:       nfs-utils = %{version}
 %description -n nfs-kernel-server
 This package contains support for the kernel-based NFS server.
 
-%package -n     nfsidmap
+%package     -n nfsidmap
 Summary:        NFSv4 ID Mapping Library
 
 %description -n nfsidmap
 This library provides NFSv4 user/group name to ID mapping functionality.
 
-%package -n     nfsidmap-devel
+%package     -n nfsidmap-devel
 Summary:        Development files for the NFSv4 ID Mapping Library
-Group:          Development/Libraries/C and C++
 Requires:       nfsidmap = %{version}
 
 %description -n nfsidmap-devel
@@ -145,7 +144,7 @@ fi
 %postun -n nfs-kernel-server
 %systemd_postun nfs-mountd.service nfs-server.service nfsdcld.service
 
-%ldconfig_scriptlets -n libnfsidmap1
+%ldconfig_scriptlets -n nfsidmap
 
 %files
 %license COPYING
