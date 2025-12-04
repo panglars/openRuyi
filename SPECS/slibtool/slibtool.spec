@@ -5,6 +5,9 @@
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
+# Avoid #!/dev/null shebang in ltmain.sh been auto-generated as requires
+%define __requires_exclude ^/dev/null$
+
 Name:           slibtool
 Version:        0.7.3
 Release:        %autorelease
