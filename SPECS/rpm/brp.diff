@@ -15,7 +15,7 @@
      ! -name "*.py" ! -name "*.js" ! -name "*.rb" \
      ! -name "*.go" -links "${nlinks}" -print0 | \
      xargs -0 -r -P${nprocs} -n${MAX_ARGS} sh -c "file \"\$@\" | \
-+    grep -v ' shared object,' | grep -v '/lib/modules/ | \
++    grep -v ' shared object,' | grep -v '/lib/modules/' | \
      sed -n -e 's/^\(.*\):[ 	]*ELF.*, not stripped.*/\1/p' | \
      grep -v 'no machine' | \
      xargs -I\{\} $STRIP -g \{\}" ARG0
