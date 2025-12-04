@@ -12,7 +12,7 @@ Summary:        A skinny libtool implementation, written in C
 License:        MIT
 URL:            http://git.midipix.org/cgit.cgi/slibtool
 #!RemoteAsset
-Source0:        http://midipix.org/dl/slibtool/%{name}-%{version}.tar.xz
+Source0:        https://midipix.org/dl/slibtool/%{name}-%{version}.tar.xz
 BuildSystem:    autotools
 
 BuildRequires:  gcc make
