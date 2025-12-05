@@ -8,7 +8,7 @@
 %global srcname pytest
 
 Name:           %{srcname}
-Version:        8.3.5
+Version:        9.0.1
 Release:        %autorelease
 Summary:        Simple powerful testing with Python
 License:        MIT
