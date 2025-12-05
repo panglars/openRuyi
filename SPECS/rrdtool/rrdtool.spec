@@ -126,7 +126,6 @@ The %{name}-ruby package includes RRDtool bindings for Ruby.
 Summary:        Lua RRDtool bindings module
 BuildRequires:  lua
 BuildRequires:  lua-devel
-Requires:       lua(abi) = %{luaver}
 Requires:       %{name} = %{version}-%{release}
 
 %description    lua
