@@ -1,0 +1,2 @@
+# Additional arguments passed to yppasswd
+YPPASSWDD_ARGS=
