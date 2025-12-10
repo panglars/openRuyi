@@ -6,7 +6,7 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 Name:           libyang
-Version:        3.13.5
+Version:        4.2.2
 Release:        %autorelease
 Summary:        YANG data modeling language library
 License:        BSD-3-Clause
