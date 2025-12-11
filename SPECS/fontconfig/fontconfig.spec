@@ -9,7 +9,7 @@ Name:           fontconfig
 Version:        2.17.1
 Release:        %autorelease
 Summary:        Font configuration and customization library
-License:        HPND AND LicenseRef-Fedora-Public-Domain AND Unicode-DFS-2016
+License:        HPND AND LicenseRef-openRuyi-Public-Domain AND Unicode-DFS-2016
 URL:            https://www.freedesktop.org/wiki/Software/fontconfig/
 #!RemoteAsset
 Source:         https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/%{version}/fontconfig-%{version}.tar.gz

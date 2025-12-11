@@ -14,7 +14,7 @@ Name:           docbook-dtds
 Version:        1.0
 Release:        %autorelease
 Summary:        SGML and XML document type definitions for DocBook
-License:        LicenseRef-docbook-dtds
+License:        DocBook-DTD
 URL:            https://www.oasis-open.org/docbook/
 #!RemoteAsset
 Source0:        https://www.oasis-open.org/docbook/sgml/3.0/docbk30.zip

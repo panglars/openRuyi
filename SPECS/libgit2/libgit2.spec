@@ -9,7 +9,7 @@ Name:           libgit2
 Version:        1.9.1
 Release:        %autorelease
 Summary:        C implementation of the Git core methods as a library with a solid API
-License:        LicenseRef-Callaway-GPLv2-with-exceptions
+License:        GPL-2.0-only WITH GCC-exception-2.0
 URL:            https://libgit2.org/
 #!RemoteAsset
 Source:         https://github.com/libgit2/libgit2/archive/refs/tags/v%{version}.tar.gz

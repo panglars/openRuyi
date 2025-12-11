@@ -9,7 +9,7 @@ Name:               console-setup
 Version:            1.242
 Release:            %autorelease
 Summary:            Tools for configuring the console font and keyboard
-License:            GPL-2.0-or-later AND MIT AND LicenseRef-Fedora-Public-Domain
+License:            GPL-2.0-or-later AND MIT AND LicenseRef-openRuyi-Public-Domain
 URL:                https://packages.debian.org/sid/console-setup
 #!RemoteAsset
 Source:             https://ftp.debian.org/debian/pool/main/c/console-setup/console-setup_%{version}.tar.xz

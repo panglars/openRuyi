@@ -11,7 +11,7 @@ Name:           python-%{srcname}
 Version:        3.17.6
 Release:        %autorelease
 Summary:        Json library for Python
-License:        (LicenseRef-Callaway-MIT OR LicenseRef-Callaway-AFL) AND (LicenseRef-Callaway-MIT OR GPL-2.0-only)
+License:        AFL-2.1 OR MIT
 URL:            https://simplejson.readthedocs.io/en/latest
 #!RemoteAsset
 Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz

@@ -9,7 +9,7 @@ Name:           filesystem
 Version:        3.18
 Release:        %autorelease
 Summary:        The basic directory layout for a Linux system
-License:        LicenseRef-openruyi-Public-Domain
+License:        LicenseRef-openRuyi-Public-Domain
 URL:            https://pagure.io/filesystem
 #!RemoteAsset
 Source0:        https://pagure.io/filesystem/raw/master/f/lang-exceptions
@@ -30,7 +30,7 @@ the directories.
 
 %package        content
 Summary:        Directory ownership content of the filesystem package
-License:        LicenseRef-openruyi-Public-Domain
+License:        LicenseRef-openRuyi-Public-Domain
 
 %description    content
 This subpackage of filesystem package contains just the file with

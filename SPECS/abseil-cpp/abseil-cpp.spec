@@ -9,17 +9,7 @@ Name:           abseil-cpp
 Version:        20250814.0
 Release:        %autorelease
 Summary:        C++ Common Libraries
-# The entire source is Apache-2.0, except:
-#   - The following files are LicenseRef-Fedora-Public-Domain:
-#       absl/time/internal/cctz/src/tzfile.h
-#         ** This file is in the public domain, so clarified as of
-#         ** 1996-06-05 by Arthur David Olson.
-#       absl/time/internal/cctz/testdata/zoneinfo/iso3166.tab
-#         # This file is in the public domain, so clarified as of
-#         # 2009-05-17 by Arthur David Olson.
-#       absl/time/internal/cctz/testdata/zoneinfo/zone1970.tab
-#         # This file is in the public domain.
-License:        Apache-2.0 AND LicenseRef-Fedora-Public-Domain
+License:        Apache-2.0 AND LicenseRef-openRuyi-Public-Domain
 URL:            https://abseil.io
 #!RemoteAsset
 Source:         https://github.com/abseil/abseil-cpp/archive/%{version}/%{name}-%{version}.tar.gz

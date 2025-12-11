@@ -9,7 +9,7 @@ Name:           python-rpm-generators
 Version:        14
 Release:        %autorelease
 Summary:        Dependency generators for Python RPMs
-License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND (LicenseRef-Fedora-Public-Domain OR LGPL-2.1-or-later OR GPL-2.0-or-later)
+License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND (LicenseRef-openRuyi-Public-Domain OR LGPL-2.1-or-later OR GPL-2.0-or-later)
 # I know...
 URL:            https://src.fedoraproject.org/rpms/python-rpm-generators
 Source0:        COPYING

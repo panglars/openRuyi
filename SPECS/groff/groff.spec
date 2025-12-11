@@ -12,7 +12,7 @@ Name:           groff
 Version:        1.23.0
 Release:        %autorelease
 Summary:        A document formatting system
-License:        GPL-3.0-or-later AND GFDL-1.3-or-later AND BSD-4-Clause-UC AND MIT AND X11 AND LicenseRef-Fedora-Public-Domain
+License:        GPL-3.0-or-later AND GFDL-1.3-or-later AND BSD-4-Clause-UC AND MIT AND X11 AND LicenseRef-openRuyi-Public-Domain
 URL:            http://www.gnu.org/software/groff/
 #!RemoteAsset
 Source0:        https://ftpmirror.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz

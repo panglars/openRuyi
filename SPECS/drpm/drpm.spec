@@ -8,7 +8,7 @@ Name:           drpm
 Version:        0.5.2
 Release:        %autorelease
 Summary:        Delta RPM library
-License:        LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-BSD
+License:        LGPL-2.1-or-later BSD-3-Clause
 URL:            https://github.com/rpm-software-management/drpm
 #!RemoteAsset
 Source:         https://github.com/rpm-software-management/drpm/releases/download/%{version}/drpm-%{version}.tar.bz2

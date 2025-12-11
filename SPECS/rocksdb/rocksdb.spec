@@ -9,7 +9,7 @@ Name:           rocksdb
 Version:        10.5.1
 Release:        %autorelease
 Summary:        A Persistent Key-Value Store for Flash and RAM Storage
-License:        GPL-2.0-only OR Apache-2.0 AND LicenseRef-Callaway-BSD
+License:        GPL-2.0-only OR Apache-2.0 AND BSD-2-Clause
 URL:            https://github.com/facebook/rocksdb
 #!RemoteAsset
 Source:         https://github.com/facebook/rocksdb/archive/refs/tags/v10.5.1.tar.gz

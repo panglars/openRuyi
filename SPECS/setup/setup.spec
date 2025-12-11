@@ -9,7 +9,7 @@ Name:           setup
 Version:        2.15
 Release:        %autorelease
 Summary:        A set of system configuration and setup files
-License:        LicenseRef-openruyi-Public-Domain
+License:        LicenseRef-openRuyi-Public-Domain
 URL:            https://src.fedoraproject.org/rpms/setup
 
 Source0:        aliases

@@ -9,7 +9,8 @@
 Name:           python-%{srcname}
 Version:        0.3.7
 Release:        %autorelease
-License:        LicenseRef-Callaway-Python
+# TODO: Is this the correct license? Or should it be Python-2.0?
+License:        PSF-2.0
 URL:            https://github.com/pypa/distlib
 Summary:        Distribution utilities
 Provides:       python3-%{srcname}

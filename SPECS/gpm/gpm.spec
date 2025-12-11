@@ -11,7 +11,7 @@ Name:           gpm
 Version:        1.20.7
 Release:        %autorelease
 Summary:        A mouse server for the Linux console
-License:        GPL-2.0-or-later AND LicenseRef-OFSFDL
+License:        GPL-2.0-or-later
 URL:            https://github.com/telmich/gpm
 #!RemoteAsset
 Source:         https://github.com/telmich/gpm/archive/refs/tags/%{version}.tar.gz

@@ -15,6 +15,7 @@ Name:           dpdk
 Version:        25.11
 Release:        %autorelease
 Summary:        Set of libraries and drivers for fast packet processing
+License:        BSD-3-Clause AND GPL-2.0-only AND LGPL-2.1-only
 URL:            http://dpdk.org
 #!RemoteAsset
 Source:         https://fast.dpdk.org/rel/dpdk-%{version}.tar.xz
@@ -37,11 +38,6 @@ BuildRequires:  libpcap-devel
 BuildRequires:  zlib-devel
 BuildRequires:  numactl-devel
 BuildRequires:  openssl-devel
-
-# Note that, while this is dual licensed, all code that is included with this
-# Pakcage are BSD licensed. The only files that aren't licensed via BSD is the
-# kni kernel module which is dual LGPLv2/BSD.
-License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-LGPLv2 AND GPL-2.0-only
 
 %description
 The Data Plane Development Kit is a set of libraries and drivers for

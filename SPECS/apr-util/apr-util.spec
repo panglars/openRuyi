@@ -14,7 +14,7 @@ Name:           apr-util
 Version:        1.6.3
 Release:        %autorelease
 Summary:        Apache Portable Runtime Utility library
-License:        Apache-2.0 AND (Beerware AND LicenseRef-Fedora-Public-Domain AND OLDAP-2.7 AND BSD-4.3RENO)
+License:        Apache-2.0 AND (Beerware AND LicenseRef-openRuyi-Public-Domain AND OLDAP-2.7 AND BSD-4.3RENO)
 URL:            https://apr.apache.org/
 #!RemoteAsset
 Source:         https://www.apache.org/dist/apr/apr-util-%{version}.tar.bz2
