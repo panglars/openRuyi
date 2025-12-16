@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: yyjeqhc <jialin.oerv@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -28,6 +29,7 @@ BuildOption(conf):  --with-data-packaging=archive
 
 BuildOption(build):  -C source
 BuildOption(install):  -C source
+BuildOption(check):  -C source
 
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
