@@ -69,6 +69,11 @@ libcap.
 %install -a
 rm %{buildroot}%{_libdir}/libcap.a
 
+%ifarch riscv64
+%check
+# need to test on qemu-system.
+%endif
+
 %files
 %license License
 %{_libdir}/libcap.so.*
