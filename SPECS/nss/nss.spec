@@ -42,23 +42,20 @@ contains the runtime libraries, development files, and command-line tools.
 install -d -m 755 %{buildroot}%{_bindir}
 install -d -m 755 %{buildroot}%{_libdir}
 install -d -m 755 %{buildroot}%{_includedir}/nss3
-install -d -m 755 %{buildroot}%{_includedir}/nspr4
 install -d -m 755 %{buildroot}%{_libdir}/pkgconfig
 install -d -m 755 %{buildroot}%{_sysconfdir}/pki/nssdb
 
 TARGET_DIR=$(cat dist/latest)
 DIST_DIR=dist/$TARGET_DIR
 
-cp -a $DIST_DIR/bin/* %{buildroot}%{_bindir}/
-cp -a $DIST_DIR/lib/* %{buildroot}%{_libdir}/
+# Use -L to follow symlinks and copy actual files instead of broken symlinks
+cp -L $DIST_DIR/bin/* %{buildroot}%{_bindir}/
 
 cp -aL dist/public/nss/*.h %{buildroot}%{_includedir}/nss3/
 
-cp -aL $DIST_DIR/include/*.h %{buildroot}%{_includedir}/nspr4/
-
-find nss/lib -name "*.so" -path "*${TARGET_DIR}*" -exec install -p -m 755 {} %{buildroot}%{_libdir}/ \;
-find nss/lib -name "*.a" -path "*${TARGET_DIR}*" -exec install -p -m 644 {} %{buildroot}%{_libdir}/ \;
-find nss/lib -name "*.chk" -path "*${TARGET_DIR}*" -exec install -p -m 644 {} %{buildroot}%{_libdir}/ \;
+# Install .so and .chk files from nss/lib only (exclude nspr), following symlinks
+find nss/lib -name "*.so" -path "*${TARGET_DIR}*" ! -name "libnspr*" ! -name "libplc*" ! -name "libplds*" -exec sh -c 'cp -L "$1" %{buildroot}%{_libdir}/' _ {} \;
+find nss/lib -name "*.chk" -path "*${TARGET_DIR}*" -exec sh -c 'cp -L "$1" %{buildroot}%{_libdir}/' _ {} \;
 
 cd %{buildroot}%{_libdir}
 ln -snf libnss3.so libnss3.so.3
@@ -66,9 +63,6 @@ ln -snf libnssutil3.so libnssutil3.so.3
 ln -snf libsmime3.so libsmime3.so.3
 ln -snf libssl3.so libssl3.so.3
 ln -snf libsoftokn3.so libsoftokn3.so.3
-ln -snf libnspr4.so libnspr4.so.0
-ln -snf libplc4.so libplc4.so.0
-ln -snf libplds4.so libplds4.so.0
 
 rm -f %{buildroot}%{_bindir}/{gtests,nss-gtest-all}
 
@@ -110,15 +104,10 @@ EOF
 %license nss/COPYING
 %dir %{_sysconfdir}/pki
 %dir %{_sysconfdir}/pki/nssdb
-%exclude %{_libdir}/libnspr4.so
-%exclude %{_libdir}/libplc4.so
-%exclude %{_libdir}/libplds4.so
 %{_libdir}/lib*.so*
 %{_libdir}/*.chk
 %{_bindir}/*
-%{_includedir}/nss3/
-%{_includedir}/nspr4/
-%{_libdir}/lib*.a
+%{_includedir}/nss3
 %{_libdir}/pkgconfig/nss-util.pc
 %{_libdir}/pkgconfig/nss.pc
 
