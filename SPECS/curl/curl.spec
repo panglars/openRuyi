@@ -44,6 +44,8 @@ BuildRequires:  pkgconfig(libssh)
 %else
 BuildRequires:  pkgconfig(gnutls)
 %endif
+# Test requires
+BuildRequires:  python3
 
 %description
 Curl is a client to get documents and files from or send documents to a
