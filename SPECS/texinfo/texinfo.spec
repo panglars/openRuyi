@@ -14,6 +14,7 @@ Release:        %autorelease
 Summary:        Tools needed to create Texinfo format documentation files
 License:        GPL-3.0-or-later
 URL:            https://www.gnu.org/software/texinfo/texinfo.html
+VCS:            git:https://https.git.savannah.gnu.org/git/texinfo.git
 #!RemoteAsset
 Source0:        https://ftpmirror.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 #!RemoteAsset
@@ -24,9 +25,10 @@ BuildSystem:    autotools
 Patch0:         0001-texinfo-7.2-fix-perl-precedence-warnings.patch
 
 BuildRequires:  perl
-Requires:  perl
 BuildRequires:  ncurses-devel
 BuildRequires:  help2man
+
+Requires:       perl
 
 %description
 Texinfo is a documentation system that can produce both online
@@ -39,7 +41,7 @@ are going to write documentation for the GNU Project.
 
 %package        devel
 Summary:        Development files for Texinfo
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description    devel
 Development files for Texinfo
