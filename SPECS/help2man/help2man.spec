@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -10,16 +11,20 @@ Release:        %autorelease
 Summary:        Script for generating man pages from --help output
 License:        GPL-3.0-or-later
 URL:            https://www.gnu.org/software/help2man/
+# VCS: No VCS link available
 #!RemoteAsset
 Source0:        https://ftpmirror.gnu.org/gnu/help2man/%{name}-%{version}.tar.xz
 #!RemoteAsset
 Source1:        https://ftpmirror.gnu.org/gnu/help2man/%{name}-%{version}.tar.xz.sig
-BuildRequires:  perl-gettext
-BuildRequires:  perl
-Requires:       perl-gettext
-Requires:       perl
 BuildSystem:    autotools
-BuildOption(conf): --enable-nls
+
+BuildOption(conf):  --enable-nls
+
+BuildRequires:  perl-Locale-gettext
+BuildRequires:  perl
+
+Requires:       perl-Locale-gettext
+Requires:       perl
 
 %description
 help2man is a script to create simple man pages from the --help and
@@ -32,7 +37,7 @@ still providing some useful information.
 %install -a
 %find_lang %{name} --with-man --generate-subpackages
 
-# no `check' target
+# No check
 %check
 
 %files
