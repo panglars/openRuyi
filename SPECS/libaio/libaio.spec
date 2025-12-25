@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Jingwiw <wangjingwei@iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -11,9 +12,11 @@ Release:        %autorelease
 Summary:        Linux-Native Asynchronous I/O Access Library
 License:        LGPL-2.1-or-later
 URL:            https://pagure.io/libaio
+VCS:            git:https://pagure.io/libaio.git
 #!RemoteAsset
-Source:         https://releases.pagure.org/libaio/libaio-%{version}.tar.gz
+Source0:        https://releases.pagure.org/libaio/libaio-%{version}.tar.gz
 
+# test failing for multilib
 Patch0:         libaio-fix-test-off64_t.patch
 
 BuildSystem:    autotools
@@ -28,18 +31,18 @@ The Linux-native asynchronous I/O (AIO) facility has a richer API and
 capability set than the POSIX AIO facility. This library provides the
 Linux-native API for AIO.
 
-%package devel
+%package        devel
 Summary:        Development Files for Linux-native Asynchronous I/O Access
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description devel
+%description    devel
 This package provides the header files and libraries needed to develop
 applications using the Linux-native asynchronous I/O facility.
 
+# No conf
 %conf
 
 %install -a
-
 mkdir -p %{buildroot}%{_libdir}/pkgconfig
 cat > %{buildroot}%{_libdir}/pkgconfig/libaio.pc << EOF
 prefix=%{_prefix}
