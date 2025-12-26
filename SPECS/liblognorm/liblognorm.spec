@@ -46,6 +46,10 @@ autoreconf -vfi
 %install -a
 find %{buildroot} -type f -name "*.a" -delete -print
 
+%check -p
+# One test at a time for tmp.rulebase file access
+%define _smp_mflags -j1
+
 %files
 %doc AUTHORS ChangeLog README
 %license COPYING
