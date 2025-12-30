@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 Name:           protobuf
-Version:        32.0
+Version:        33.2
 Release:        %autorelease
 Summary:        Protocol Buffers - Google's data interchange format
 License:        BSD-3-Clause
