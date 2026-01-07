@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
-# SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
+# SPDX-FileCopyrightText: (C) 2025, 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
+# SPDX-FileCopyrightText: (C) 2025, 2026 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: laokz <zhangkai@iscas.ac.cn>
 # SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
@@ -421,6 +421,10 @@ ln -s %{buildroot}%{rtlddir} %{buildroot}/%{rtldlib}
 mkdir -p %{buildroot}%{_sbindir}
 ln -s %{buildroot}%{_sbindir} %{buildroot}/sbin
 
+%if "%{_sbindir}" == "%{_bindir}"
+ln -s bin %{buildroot}/%{_prefix}/sbin
+%endif
+
 %ifarch riscv64
 mkdir -p %{buildroot}%{_libdir}
 ln -s . %{buildroot}%{_libdir}/lp64d
@@ -545,6 +549,9 @@ rm %{buildroot}/%{_lib}
 rm %{buildroot}/%{rtldlib}
 %endif
 rm %{buildroot}/sbin
+%if "%{_sbindir}" == "%{_bindir}"
+rm %{buildroot}/%{_prefix}/sbin
+%endif
 
 %endif
 
