@@ -1,6 +1,7 @@
-# SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
-# SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
+# SPDX-FileCopyrightText: (C) 2025, 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
+# SPDX-FileCopyrightText: (C) 2025, 2026 openRuyi Project Contributors
 # SPDX-FileContributor: Jingwiw <wangjingwei@iscas.ac.cn>
+# SPDX-FileContributor: Xuhai Chang <xuhai.oerv@isrc.iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
@@ -23,7 +24,6 @@ BuildSystem: meson
 BuildOption(conf): -Dgtk_doc=%{?with_doc:true}%{!?with_doc:false}
 BuildOption(conf): -Ddoctool=%{?with_doc:enabled}%{!?with_doc:disabled}
 BuildOption(conf): -Dcairo=%{?with_tests:enabled}%{!?with_tests:disabled}
-
 
 BuildRequires:  bison
 BuildRequires:  flex
@@ -52,6 +52,9 @@ Summary:        The GObject Introspection development toolchain
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       python(abi) = %{python3_version}
 Requires:       pkgconfig(glib-2.0) >= 2.80.0
+# The package uses distutils which is no longer part of Python 3.12+ standard library
+# https://bugzilla.redhat.com/show_bug.cgi?id=2135406
+Requires:       python3-setuptools
 
 %description devel
 This is the primary package for developers. It contains the essential
