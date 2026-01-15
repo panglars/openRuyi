@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
-# SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
+# SPDX-FileCopyrightText: (C) 2025, 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
+# SPDX-FileCopyrightText: (C) 2025, 2026 openRuyi Project Contributors
 # SPDX-FileContributor: Suyun114 <ziyu.oerv@isrc.iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: laokz <zhangkai@iscas.ac.cn>
@@ -51,9 +51,6 @@ Requires:       libxcrypt-devel
 This is Guile, a portable, embeddable Scheme implementation written in
 C. Guile provides a machine independent execution platform that can be
 linked in as a library when building extensible programs.
-
-%conf -p
-export CFLAGS="$CFLAGS -std=gnu17"
 
 %files
 %license LICENSE COPYING*
