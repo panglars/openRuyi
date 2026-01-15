@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
-# SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
+# SPDX-FileCopyrightText: (C) 2025, 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
+# SPDX-FileCopyrightText: (C) 2025, 2026 openRuyi Project Contributors
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
@@ -46,7 +46,7 @@ modify Exif, IPTC, XMP and ICC image metadata.
 
 %package        devel
 Summary:        Header files, libraries and development documentation for %{name}
-Requires:       %{name}-libs = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description    devel
 This package contains the libraries and header files needed for
