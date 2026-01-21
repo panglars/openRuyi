@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -11,14 +12,16 @@ Release:        %autorelease
 Summary:        A FUSE filesystem for mirroring a directory with altered permissions
 License:        GPL-2.0-or-later
 URL:            https://bindfs.org/
+VCS:            git:https://github.com/mpartel/bindfs
 #!RemoteAsset
 Source:         https://bindfs.org/downloads/bindfs-%{version}.tar.gz
 BuildSystem:    autotools
 
-BuildRequires:  fuse-devel
+BuildRequires:  pkgconfig(fuse)
 BuildRequires:  gcc
 BuildRequires:  make
-BuildRequires:  autoconf automake
+BuildRequires:  autoconf
+BuildRequires:  automake
 
 Requires:       fuse
 
@@ -28,7 +31,6 @@ and altering permission bits in the mirror.
 
 # TODO: enabel when we have ruby.
 %check
-
 
 %files
 %doc ChangeLog README.md
