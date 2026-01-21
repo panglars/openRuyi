@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -13,24 +14,25 @@ Release:        %autorelease
 Summary:        A Fast C/C++ Compiler Cache
 License:        GPL-3.0-or-later
 URL:            https://ccache.dev/
+VCS:            git:https://github.com/ccache/ccache
 #!RemoteAsset
 Source:         https://github.com/ccache/ccache/archive/refs/tags/v%{version}.tar.gz
 BuildSystem:    cmake
 
-BuildOption(conf): -DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON
+BuildOption(conf):  -DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON
 %if %{without test}
-BuildOption(conf): -DENABLE_TESTING:BOOL=OFF
+BuildOption(conf):  -DENABLE_TESTING:BOOL=OFF
 %endif
-BuildOption(conf): -DREDIS_STORAGE_BACKEND:BOOL=OFF
-BuildOption(conf): -DENABLE_DOCUMENTATION:BOOL=OFF
+BuildOption(conf):  -DREDIS_STORAGE_BACKEND:BOOL=OFF
+BuildOption(conf):  -DENABLE_DOCUMENTATION:BOOL=OFF
 
 BuildRequires:  cmake
-BuildRequires:  fmt-devel
+BuildRequires:  pkgconfig(fmt)
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  libzstd-devel
+BuildRequires:  pkgconfig(libzstd)
 BuildRequires:  pkgconfig
-BuildRequires:  xxhash-devel
+BuildRequires:  pkgconfig(libxxhash)
 %if %{with test}
 BuildRequires:  doctest-devel
 %endif
@@ -41,7 +43,6 @@ Provides:       distcc:%{_bindir}/ccache
 ccache is a compiler cache. It speeds up recompilation by caching the
 result of previous compilations and detecting when the same compilation is
 being done again.
-
 
 %install -a
 # create the compat symlinks into /usr/libdir/ccache
