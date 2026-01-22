@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -15,11 +16,10 @@ VCS:            git:https://github.com/mkj/dropbear
 Source0:        https://matt.ucc.asn.au/dropbear/releases/dropbear-%{version}.tar.bz2
 Source1:        dropbear.service
 Source2:        dropbear-keygen.service
-
 BuildSystem:    autotools
 
-BuildOption(conf): --enable-pam
-BuildOption(conf): --disable-bundled-libtom
+BuildOption(conf):  --enable-pam
+BuildOption(conf):  --disable-bundled-libtom
 
 BuildRequires:  gcc
 BuildRequires:  make
