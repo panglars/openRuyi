@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <jialin.oerv@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
@@ -35,21 +36,21 @@ A deltarpm contains the difference between an old and a new version of a rpm.
 
 %package     -n drpmsync
 Summary:        Sync a file tree with deltarpms
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description -n drpmsync
 Tool to sync a file tree with deltarpms.
 
 %package     -n deltaiso
 Summary:        Create deltas between isos containing rpms
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description -n deltaiso
 Tools for creating and using deltaisos.
 
 %package     -n python-deltarpm
 Summary:        Python bindings for deltarpm
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       python3-deltarpm
 %python_provide python3-deltarpm
 
