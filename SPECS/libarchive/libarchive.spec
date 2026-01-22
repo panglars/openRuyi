@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
-# SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
+# SPDX-FileCopyrightText: (C) 2025, 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
+# SPDX-FileCopyrightText: (C) 2025, 2026 openRuyi Project Contributors
 # SPDX-FileContributor: Xuhai Chang <xuhai.oerv@isrc.iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 #
@@ -19,10 +19,6 @@ Source1:        https://github.com/libarchive/libarchive/releases/download/v%{ve
 BuildSystem:  autotools
 BuildOption(conf): --disable-static
 
-%ifarch riscv64
-# XXX: Fix failed check
-BuildOption(check): XFAIL_TESTS=bsdtar_test
-%endif
 
 BuildRequires:  acl-devel
 BuildRequires:  bzip2-devel
