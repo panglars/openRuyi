@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -10,13 +11,14 @@ Release:        %autorelease
 Summary:        Domain-specific language for text processing
 License:        GPL-3.0-or-later
 URL:            https://www.gnu.org/software/gawk/
+VCS:            git:https://https.git.savannah.gnu.org/git/gawk.git
 #!RemoteAsset
 Source:         http://ftpmirror.gnu.org/gnu/gawk/gawk-%{version}.tar.xz
 #!RemoteAsset
 Source2:        http://ftpmirror.gnu.org/gnu/gawk/gawk-%{version}.tar.xz.sig
-BuildRequires:  mpfr-devel
-
 BuildSystem:    autotools
+
+BuildRequires:  pkgconfig(mpfr)
 
 Provides:       awk
 Provides:       /bin/gawk
