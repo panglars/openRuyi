@@ -14,7 +14,7 @@ URL:            https://github.com/rpm-software-management/createrepo_c
 #!RemoteAsset
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildSystem:    cmake
-Provides:       createrepo = %{version}-%{release}
+
 # Part of https://github.com/rpm-software-management/createrepo_c/pull/438
 Patch0:         0001-fix-build-with-cmake-4.patch
 
@@ -40,6 +40,8 @@ BuildRequires:  pkgconfig(rpm)
 BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(libzstd)
 BuildRequires:  pkgconfig(drpm)
+
+Provides:       createrepo = %{version}-%{release}
 
 %description
 C implementation of Createrepo.
