@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Jingwiw <wangjingwei@iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -11,25 +12,25 @@ Name:           gettext
 Version:        0.26
 Release:        %autorelease
 Summary:        GNU Internationalization (i18n) and Localization (l10n) library and tools
-License:        (GPL-3.0-or-later AND LGPL-2.1-or-later)
+License:        GPL-3.0-or-later AND LGPL-2.1-or-later
 URL:            https://www.gnu.org/software/gettext/
+VCS:            git:https://git.savannah.gnu.org/git/gettext.git
 #!RemoteAsset
 Source0:        https://ftpmirror.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
+BuildSystem:    autotools
 
 Patch0:         gettext-fix-nls-stub.patch
 
-BuildSystem:    autotools
-
-BuildOption(conf): --disable-csharp
-BuildOption(conf): --with-xz
-BuildOption(conf): --without-included-gettext
-BuildOption(conf): --without-included-libunistring
-BuildOption(conf): --enable-shared
-BuildOption(conf): --disable-rpath
+BuildOption(conf):  --disable-csharp
+BuildOption(conf):  --with-xz
+BuildOption(conf):  --without-included-gettext
+BuildOption(conf):  --without-included-libunistring
+BuildOption(conf):  --enable-shared
+BuildOption(conf):  --disable-rpath
 %if %{with nls}
-BuildOption(conf): --enable-nls
+BuildOption(conf):  --enable-nls
 %else
-BuildOption(conf): --disable-nls
+BuildOption(conf):  --disable-nls
 %endif
 
 BuildRequires:  autoconf
@@ -40,68 +41,58 @@ BuildRequires:  gcc-c++
 BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  libunistring-devel
-BuildRequires:  ncurses-devel
-BuildRequires:  acl-devel
+BuildRequires:  pkgconfig(ncurses)
+BuildRequires:  pkgconfig(libacl)
 BuildRequires:  libxml2-devel
-BuildRequires:  libattr-devel
-BuildRequires:  xz-devel
+BuildRequires:  pkgconfig(libattr)
+BuildRequires:  pkgconfig(liblzma)
 %if %{with nls}
 BuildRequires:  gettext-tools
 %endif
 
+Requires:       %{name}-tools%{?_isa} = %{version}-%{release}
+Requires:       %{name}-runtime%{?_isa} = %{version}-%{release}
+
 %description
 Meta-package that installs the GNU gettext runtime and developer tools.
 
-Provides:       bundled(gnulib)
-Requires:       %{name}-tools = %{version}-%{release}
-Requires:       libtextstyle%{?_isa} = %{version}-%{release}
-
-%package devel
+%package        devel
 Summary:        Development files for the entire GNU gettext eco-system
 Requires:       %{name}-runtime%{?_isa} = %{version}-%{release}
 Requires:       %{name}-tools%{?_isa} = %{version}-%{release}
-Requires:       libtextstyle%{?_isa} = %{version}-%{release}
-%description devel
+
+%description    devel
 This is the one-stop package for developing internationalized applications.
 It provides all headers, pkgconfig files, and development libraries for
 gettext-runtime, gettext-tools, and libtextstyle.
 
-%package runtime
+%package        runtime
 Summary:        Runtime components for gettext
-Requires:       envsubst = %{version}-%{release}
-%description runtime
+Requires:       envsubst%{?_isa} = %{version}-%{release}
+
+%description    runtime
 Contains runtime libraries (like libasprintf) and essential commands
 (like gettext, ngettext) needed to run internationalized programs.
 
-%package tools
+%package        tools
 Summary:        Tools for creating and managing message catalogs
-Requires:       %{name}-runtime = %{version}-%{release}
-%description tools
+Requires:       %{name}-runtime%{?_isa} = %{version}-%{release}
+
+%description    tools
 Contains tools for developers and translators to create and manage
 translation files (.po, .mo), such as msgfmt and xgettext.
 
-%package -n envsubst
+%package     -n envsubst
 Summary:        Substitutes the values of environment variables
+
 %description -n envsubst
 A standalone utility to substitute environment variables in shell scripts.
 
-%package -n libtextstyle
-Summary:        Library for styling text on terminal emulators
-License:        LGPL-2.1-or-later
-%description -n libtextstyle
-Provides the libtextstyle library for styling console output.
-
-%package -n libtextstyle-devel
-Summary:        Development files for libtextstyle
-Requires:       libtextstyle%{?_isa} = %{version}-%{release}
-%description -n libtextstyle-devel
-Contains development files for the libtextstyle library.
-
-%package doc
+%package        doc
 Summary:        Documentation and examples for gettext
 BuildArch:      noarch
 
-%description doc
+%description    doc
 Contains detailed documentation (info, html) and extensive examples.
 
 %if %{with nls}
@@ -134,6 +125,8 @@ rm -f %{buildroot}%{_libdir}/*.a
 %{_libdir}/preloadable_libintl.so
 %{_mandir}/man1/gettext.1*
 %{_mandir}/man1/ngettext.1*
+# libtextstyle
+%{_libdir}/libtextstyle.so.*
 
 %files tools
 %{_bindir}/msg*
@@ -166,20 +159,15 @@ rm -f %{buildroot}%{_libdir}/*.a
 %{_libdir}/libgettextlib.so
 %{_libdir}/libgettextsrc.so
 %{_libdir}/libgettextpo.so
+# libtextstyle
+%{_includedir}/textstyle.h
+%{_includedir}/textstyle/
+%{_libdir}/libtextstyle.so
 # Common development files
 %{_datadir}/aclocal/nls.m4
 %{_datadir}/%{name}-%{version}/
 # API documentation
 %{_mandir}/man3/*
-
-%files -n libtextstyle
-%license COPYING
-%{_libdir}/libtextstyle.so.*
-
-%files -n libtextstyle-devel
-%{_includedir}/textstyle.h
-%{_includedir}/textstyle/
-%{_libdir}/libtextstyle.so
 
 %files -n envsubst
 %{_bindir}/envsubst
