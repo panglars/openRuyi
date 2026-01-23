@@ -3,6 +3,7 @@
 # SPDX-FileContributor: Jingkun Zheng <zhengjingkun@iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: sunyuechi <sunyuechi@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -14,10 +15,9 @@ License:        BSD-3-Clause
 URL:            https://github.com/intel/isa-l
 #!RemoteAsset
 Source0:        https://github.com/intel/isa-l/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
 BuildSystem:    autotools
 
-BuildOption(conf): --disable-static
+BuildOption(conf):  --disable-static
 
 BuildRequires:  make
 BuildRequires:  autoconf
