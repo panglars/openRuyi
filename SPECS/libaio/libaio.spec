@@ -21,7 +21,7 @@ Patch0:         libaio-fix-test-off64_t.patch
 
 BuildSystem:    autotools
 
-BuildOption(install): libdir=%{_libdir}
+BuildOption(install):  libdir=%{_libdir}
 
 BuildRequires:  gcc
 BuildRequires:  make
