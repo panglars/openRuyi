@@ -24,7 +24,7 @@ BuildRequires:  make
 BuildRequires:  automake
 BuildRequires:  autoconf
 BuildRequires:  libtool
-BuildRequires:  libmnl-devel
+BuildRequires:  pkgconfig(libmnl)
 
 %description
 IP sets are a framework inside the Linux kernel since version 2.4.x, which can
