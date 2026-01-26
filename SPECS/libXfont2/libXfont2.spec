@@ -42,9 +42,9 @@ libX11.
 
 %package        devel
 Summary:        Development files for the X font handling library
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description devel
+%description    devel
 libXfont provides the core of the legacy X11 font system, handling
 the index files (fonts.dir, fonts.alias, fonts.scale), the various
 font file formats, and rasterizing them. It is used by the X servers,
