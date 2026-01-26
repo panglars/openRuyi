@@ -1,46 +1,49 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
-Name:     libplist
-Version:  2.7.0
-Release:  %autorelease
-Summary:  Library for manipulating Apple Binary and XML Property Lists
-
-License:  LGPL-2.0-or-later
-URL:      https://www.libimobiledevice.org/
-VCS:      git:https://github.com/libimobiledevice/libplist
+Name:           libplist
+Version:        2.7.0
+Release:        %autorelease
+Summary:        Library for manipulating Apple Binary and XML Property Lists
+License:        LGPL-2.0-or-later
+URL:            https://www.libimobiledevice.org/
+VCS:            git:https://github.com/libimobiledevice/libplist
 #!RemoteAsset
-Source:   https://github.com/libimobiledevice/libplist/releases/download/%{version}/libplist-%{version}.tar.bz2
+Source:         https://github.com/libimobiledevice/libplist/releases/download/%{version}/libplist-%{version}.tar.bz2
+BuildSystem:    autotools
+
+BuildOption(conf):  --disable-static
 
 BuildRequires:  gcc-c++
 BuildRequires:  python3-Cython
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  make
-BuildOption(conf): --disable-static
-BuildSystem:    autotools
 
 %description
 libplist is a library for manipulating Apple Binary and XML Property Lists
 
-%package  devel
-Summary:  Development package for libplist
-Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: pkgconfig
+%package        devel
+Summary:        Development package for libplist
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       pkgconfig
 
-%description devel
+%description    devel
 %{name}, development headers and libraries.
 
-%package  -n python3-libplist
-Summary:  Python3 bindings for libplist
-Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: python3
+%package     -n python-libplist
+Summary:        Python bindings for libplist
+Provides:       python3-%{name}
+%python_provide python3-%{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       python3
 
-%description -n python3-libplist
-%{name}, python3 libraries and bindings.
+%description -n python-libplist
+%{name}, python libraries and bindings.
 
 %conf -p
 export PYTHON_VERSION="3"
@@ -60,7 +63,7 @@ export PYTHON_VERSION="3"
 %{_libdir}/libplist++-*.so
 %{_includedir}/plist
 
-%files -n python3-libplist
+%files -n python-libplist
 %{python3_sitearch}/plist.so
 
 %changelog
