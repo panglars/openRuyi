@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -11,25 +12,29 @@ Release:        %autorelease
 Summary:        Support for Internationalized Domain Names (IDN) based on IDNA2008
 License:        (GPL-2.0-or-later OR LGPL-3.0-or-later) AND GPL-3.0-or-later
 URL:            https://www.gnu.org/software/libidn/#libidn2
+VCS:            git:https://gitlab.com/libidn/libidn2
 #!RemoteAsset
 Source0:        https://ftpmirror.gnu.org/gnu/libidn/%{name}-%{version}.tar.gz
 #!RemoteAsset
 Source1:        https://ftpmirror.gnu.org/gnu/libidn/%{name}-%{version}.tar.gz.sig
 #!RemoteAsset
 Source2:        https://josefsson.org/key-20190320.txt#/%{name}.keyring
+BuildSystem:    autotools
+
+BuildOption(conf):  --disable-static
+
 BuildRequires:  libunistring-devel
 BuildRequires:  pkgconfig
-BuildSystem:    autotools
-BuildOption(conf): --disable-static
+
 %description
 An implementation of the IDNA2008 specifications (RFCs 5890, 5891, 5892, 5893)
 
-%package devel
+%package        devel
 Summary:        Include Files and Libraries mandatory for Development
 License:        (GPL-2.0-or-later OR LGPL-3.0-or-later) AND GPL-3.0-or-later
-Requires:       %{name} = %{version}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description devel
+%description    devel
 An implementation of the IDNA2008 specifications (RFCs 5890, 5891, 5892, 5893)
 
 %install -a
