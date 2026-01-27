@@ -26,7 +26,7 @@ other programs with a specific NUMA policy.
 
 %package        devel
 Summary:        Development package for building Applications that use numa
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 License:        LGPL-2.1-only and GPL-2.0-only
 
 %description    devel
