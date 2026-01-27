@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: yyjeqhc <jialin.oerv@isrc.iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -41,21 +42,14 @@ BuildOption(conf):  -Dsnap=disabled
 BuildOption(conf):  -Decho-cancel-webrtc=disabled
 BuildOption(conf):  -Debur128=disabled
 BuildOption(conf):  -Donnxruntime=disabled
-
 BuildOption(conf):  -Dpipewire-jack=disabled -Djack-devel=false
 BuildOption(conf):  -Djack=disabled
-
 BuildOption(conf):  -Dlibcamera=disabled
-
 BuildOption(conf):  -Dpipewire-alsa=enabled
-
 BuildOption(conf):  -Dvulkan=enabled
-
 BuildOption(conf):  -Dlibmysofa=disabled
-
 BuildOption(conf):  -Dlv2=disabled
 BuildOption(conf):  -Droc=disabled
-
 BuildOption(conf):  -Dlibffado=disabled
 
 BuildRequires:  meson >= 0.59.0
@@ -73,20 +67,18 @@ BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(readline)
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(ncurses)
-BuildRequires:  pulseaudio-devel
-
+BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(gstreamer-1.0) >= 1.10.0
 BuildRequires:  pkgconfig(gstreamer-base-1.0) >= 1.10.0
 BuildRequires:  pkgconfig(gstreamer-plugins-base-1.0) >= 1.10.0
 BuildRequires:  pkgconfig(gstreamer-net-1.0) >= 1.10.0
 BuildRequires:  pkgconfig(gstreamer-allocators-1.0) >= 1.10.0
-
-BuildRequires:  alsa-lib-devel
+BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(bluez)
 BuildRequires:  pkgconfig(fdk-aac)
-BuildRequires:  libsndfile-devel
-BuildRequires:  speexdsp-devel
-BuildRequires:  fftw-devel
+BuildRequires:  pkgconfig(sndfile)
+BuildRequires:  pkgconfig(speexdsp)
+BuildRequires:  pkgconfig(fftw3)
 BuildRequires:  doxygen
 BuildRequires:  python3-docutils
 BuildRequires:  graphviz
@@ -120,22 +112,23 @@ cp %{buildroot}%{_datadir}/alsa/alsa.conf.d/99-pipewire-default.conf \
 
 install -d -m 0755 %{buildroot}%{_datadir}/pipewire/pipewire-pulse.conf.d/
 ln -s ../pipewire-pulse.conf.avail/20-upmix.conf \
-		%{buildroot}%{_datadir}/pipewire/pipewire-pulse.conf.d/20-upmix.conf
+        %{buildroot}%{_datadir}/pipewire/pipewire-pulse.conf.d/20-upmix.conf
 # rates config
 ln -s ../pipewire.conf.avail/10-rates.conf \
-		%{buildroot}%{_datadir}/pipewire/pipewire.conf.d/10-rates.conf
+        %{buildroot}%{_datadir}/pipewire/pipewire.conf.d/10-rates.conf
 # upmix config
 ln -s ../pipewire.conf.avail/20-upmix.conf \
-		%{buildroot}%{_datadir}/pipewire/pipewire.conf.d/20-upmix.conf
+        %{buildroot}%{_datadir}/pipewire/pipewire.conf.d/20-upmix.conf
 ln -s ../client.conf.avail/20-upmix.conf \
-		%{buildroot}%{_datadir}/pipewire/client.conf.d/20-upmix.conf
+        %{buildroot}%{_datadir}/pipewire/client.conf.d/20-upmix.conf
 # raop config
 ln -s ../pipewire.conf.avail/50-raop.conf \
-		%{buildroot}%{_datadir}/pipewire/pipewire.conf.d/50-raop.conf
+        %{buildroot}%{_datadir}/pipewire/pipewire.conf.d/50-raop.conf
 # todo: fix the name error.
 # Avoid illegal package names
 rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/*@*
 rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/en_GB/
+
 %find_lang %{name} --generate-subpackages
 
 %post
@@ -262,7 +255,7 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/en_GB/
 %config(noreplace) %{_sysconfdir}/alsa/conf.d/99-pipewire-default.conf
 # vulkan
 %{_libdir}/spa-%{spaversion}/vulkan/
-#pulseaudio
+# pulseaudio
 %{_bindir}/pipewire-pulse
 %{_userunitdir}/pipewire-pulse.*
 %{_datadir}/pipewire/pipewire-pulse.conf
@@ -275,7 +268,7 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/en_GB/
 # v412
 %{_bindir}/pw-v4l2
 %{_libdir}/pipewire-%{apiversion}/v4l2/libpw-v4l2.so
-#other
+# other
 %{_datadir}/pipewire/pipewire.conf.d/50-raop.conf
 %{_datadir}/pipewire/pipewire.conf.d/10-rates.conf
 %{_datadir}/pipewire/pipewire.conf.d/20-upmix.conf
