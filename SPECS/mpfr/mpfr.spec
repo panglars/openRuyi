@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -10,12 +11,14 @@ Release:        %autorelease
 Summary:        The GNU multiple-precision floating-point library
 License:        LGPL-3.0-or-later
 URL:            https://www.mpfr.org/
+VCS:            git:https://gitlab.inria.fr/mpfr/mpfr.git
 #!RemoteAsset
 Source0:        https://www.mpfr.org/mpfr-%{version}/mpfr-%{version}.tar.xz
 #!RemoteAsset
 Source1:        https://www.mpfr.org/mpfr-%{version}/mpfr-%{version}.tar.xz.asc
 Buildsystem:    autotools
-BuildRequires:  gmp-devel
+
+BuildRequires:  pkgconfig(gmp)
 BuildRequires:  pkgconfig
 
 %description
@@ -29,12 +32,12 @@ well-defined semantics. It copies the good ideas from the ANSI/IEEE-754
 standard for double-precision floating-point arithmetic (53-bit
 mantissa).
 
-%package devel
+%package        devel
 Summary:        Development files for the GNU multiple-precision floating-point library
-Requires:       gmp-devel
-Requires:       mpfr = %{version}
+Requires:       pkgconfig(gmp)
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description devel
+%description    devel
 Development files for the GNU multiple-precision floating-point library.
 
 The MPFR library is a C library for multiple-precision floating-point
