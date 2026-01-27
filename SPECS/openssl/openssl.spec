@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Jingwiw <wangjingwei@iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -21,11 +22,15 @@ Release:        %autorelease
 Summary:        Cryptography and SSL/TLS Toolkit
 License:        Apache-2.0
 URL:            https://www.openssl.org/
+VCS:            git:https://github.com/openssl/openssl.git
 #!RemoteAsset
 Source:         https://www.openssl.org/source/%{name}-%{version}.tar.gz
+BuildSystem:    autotools
 
 # Use the shared jitterentropy library instead of static
-Patch1:         openssl-shared-jitterentropy.patch
+Patch0:         openssl-shared-jitterentropy.patch
+
+BuildOption(check):  LD_LIBRARY_PATH="$PWD"
 
 BuildRequires:  gcc
 BuildRequires:  jitterentropy-devel
@@ -33,29 +38,27 @@ BuildRequires:  make
 BuildRequires:  perl
 BuildRequires:  pkgconfig
 BuildRequires:  pkgconfig(zlib)
-BuildSystem:    autotools
-BuildOption(check):  LD_LIBRARY_PATH="$PWD"
+
 %description
 OpenSSL is a software library to be used in applications that need to
 secure communications over computer networks against eavesdropping or
 need to ascertain the identity of the party at the other end.
 OpenSSL contains an implementation of the SSL and TLS protocols.
 
+%package        devel
+Summary:        Development files for building with OpenSSL
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%package devel
-Summary:       Development files for building with OpenSSL
-Requires:      %{name}%{?_isa} = %{version}-%{release}
-
-%description devel
+%description    devel
 This package contains the header files, pkgconfig/cmake files, development
 symlinks, and API documentation needed to develop applications which will
 use OpenSSL.
 
-%package doc
+%package        doc
 Summary:        HTML documentation for OpenSSL
 BuildArch:      noarch
 
-%description doc
+%description    doc
 This package contains the HTML version of the API documentation and man
 pages for OpenSSL.
 
@@ -100,7 +103,6 @@ export HARNESS_JOBS=%{_ncpus}
 
 
 %install -a
-
 # Remove static libraries
 rm -f %{buildroot}%{_libdir}/*.a
 # Remove the cnf.dist
