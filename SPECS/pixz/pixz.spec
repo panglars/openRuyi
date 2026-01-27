@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -14,12 +15,15 @@ URL:            https://github.com/vasi/pixz
 #!RemoteAsset
 Source:         https://github.com/vasi/pixz/archive/refs/tags/v%{version}.tar.gz
 BuildSystem:    autotools
-# build manpage when we have asciidoc
-BuildOption(conf): --without-manpage
-BuildOption(build): CFLAGS="%{optflags} -fcommon"
 
-BuildRequires:  pkgconfig autoconf
-BuildRequires:  xz automake
+# build manpage when we have asciidoc
+BuildOption(conf):  --without-manpage
+BuildOption(build):  CFLAGS="%{optflags} -fcommon"
+
+BuildRequires:  pkgconfig
+BuildRequires:  autoconf
+BuildRequires:  xz
+BuildRequires:  automake
 BuildRequires:  pkgconfig(libarchive)
 BuildRequires:  pkgconfig(liblzma)
 
