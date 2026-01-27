@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Xuhai Chang <xuhai.oerv@isrc.iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -9,19 +10,20 @@ Name:           protobuf-c
 Version:        1.5.2
 Release:        %autorelease
 Summary:        C bindings for Google's Protocol Buffers
-
 License:        BSD-2-Clause
 URL:            https://github.com/protobuf-c/protobuf-c
 #!RemoteAsset
 Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+BuildSystem:    autotools
+
+BuildOption(conf):  --disable-static
 
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  pkgconfig(protobuf)
-BuildSystem:    autotools
-BuildOption(conf): --disable-static
+
 %description
 Protocol Buffers are a way of encoding structured data in an efficient yet
 extensible format. This package provides a code generator and run-time
@@ -29,20 +31,20 @@ libraries to use Protocol Buffers from pure C (not C++).
 
 It uses a modified version of protoc called protoc-c.
 
-%package compiler
+%package        compiler
 Summary:        Protocol Buffers C compiler
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description compiler
 This package contains a modified version of the Protocol Buffers
 compiler for the C programming language called protoc-c.
 
-%package devel
+%package        devel
 Summary:        Protocol Buffers C headers and libraries
-Requires:       %{name} = %{version}-%{release}
-Requires:       %{name}-compiler = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}-compiler%{?_isa} = %{version}-%{release}
 
-%description devel
+%description    devel
 This package contains protobuf-c headers and libraries.
 
 %files
