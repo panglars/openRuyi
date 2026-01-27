@@ -3,6 +3,7 @@
 # SPDX-FileContributor: Dingli Zhang <dingli@iscas.ac.cn>
 # SPDX-FileContributor: Jingkun Zheng <zhengjingkun@iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -12,6 +13,7 @@
 %global buildver        36
 %global newjavaver      %{majorver}.%{minorver}.%{securityver}
 %global _jvmdir         %_libdir/jvm
+
 %bcond bootstrap        1
 
 Name:           java-25-openjdk
@@ -20,6 +22,7 @@ Release:        %autorelease
 Summary:        OpenJDK 25 Runtime Environment
 License:        GPL-2.0-with-classpath-exception
 URL:            https://openjdk.org
+VCS:            git:https://github.com/openjdk/jdk25u
 #!RemoteAsset
 Source0:        https://github.com/openjdk/jdk%{majorver}u/archive/refs/tags/jdk-%{majorver}+%{buildver}.tar.gz
 %if %{with bootstrap}
@@ -33,27 +36,27 @@ BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gcc-c++
 BuildRequires:  make
-BuildRequires:  libX11-devel
-BuildRequires:  libXi-devel
-BuildRequires:  libXrandr-devel
-BuildRequires:  libXrender-devel
-BuildRequires:  libXt-devel
-BuildRequires:  libXtst-devel
-BuildRequires:  freetype-devel
-BuildRequires:  libpng-devel
-BuildRequires:  cups-devel
-BuildRequires:  alsa-lib-devel
-BuildRequires:  fontconfig-devel
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xi)
+BuildRequires:  pkgconfig(xrandr)
+BuildRequires:  pkgconfig(xrender)
+BuildRequires:  pkgconfig(xt)
+BuildRequires:  pkgconfig(xtst)
+BuildRequires:  pkgconfig(freetype2)
+BuildRequires:  pkgconfig(libpng)
+BuildRequires:  pkgconfig(cups)
+BuildRequires:  pkgconfig(alsa)
+BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  zip
 BuildRequires:  pkgconfig
 %if %{without bootstrap}
 BuildRequires:  java-25-openjdk
 %endif
 Requires(post): update-alternatives
-Requires(preun):update-alternatives
+Requires(preun): update-alternatives
 
-Provides:       java-%{majorver}-openjdk-devel        = %{version}-%{release}
-Provides:       java-%{majorver}-openjdk-headless     = %{version}-%{release}
+Provides:       java-%{majorver}-openjdk-devel = %{version}-%{release}
+Provides:       java-%{majorver}-openjdk-headless = %{version}-%{release}
 
 %description
 The OpenJDK 25 runtime environment.
