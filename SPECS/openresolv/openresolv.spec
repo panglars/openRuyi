@@ -1,10 +1,9 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
-
-
 
 Name:           openresolv
 Version:        3.17.0
@@ -12,18 +11,20 @@ Release:        %autorelease
 Summary:        A framework for managing DNS resolution
 License:        BSD-2-Clause
 URL:            https://roy.marples.name/projects/openresolv
+VCS:            git:https://github.com/NetworkConfiguration/openresolv
 #!RemoteAsset
 Source:         https://github.com/NetworkConfiguration/openresolv/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildSystem:    autotools
 
-BuildOption(conf): --sbindir=%{_sbindir}
-BuildOption(conf): --libexecdir=%{_prefix}/lib/resolvconf
+BuildOption(conf):  --sbindir=%{_sbindir}
+BuildOption(conf):  --libexecdir=%{_prefix}/lib/resolvconf
 
 BuildRequires:  make
 BuildRequires:  gcc
 
-Provides:         resolvconf = %{version}
-Requires(post):   update-alternatives
+Provides:       resolvconf = %{version}-%{release}
+
+Requires(post):  update-alternatives
 Requires(postun): update-alternatives
 
 %description
