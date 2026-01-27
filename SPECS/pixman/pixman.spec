@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -15,7 +16,7 @@ URL:            https://gitlab.freedesktop.org/pixman/pixman
 Source:         https://www.cairographics.org/releases/%{name}-%{version}.tar.gz
 BuildSystem:    meson
 
-BuildOption(conf): --auto-features=auto
+BuildOption(conf):  --auto-features=auto
 
 BuildRequires:  meson
 
@@ -23,11 +24,11 @@ BuildRequires:  meson
 Pixman is a pixel manipulation library for X and cairo. This package contains
 the runtime shared library.
 
-%package devel
+%package        devel
 Summary:        Development files for the Pixel Manipulation library
-Requires:       %{name} = %{version}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description devel
+%description    devel
 This package contains the header files, pkg-config file, and other development
 files for the pixman library.
 
