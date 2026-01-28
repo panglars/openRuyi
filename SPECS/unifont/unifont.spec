@@ -10,7 +10,7 @@ Release:        %autorelease
 Summary:        Tools and glyph descriptions for the GNU Unifont fonts
 License:        GPL-2.0-or-later AND OFL-1.1
 URL:            https://unifoundry.com/unifont/index.html
-# This project does not have a public VCS repository
+# VCS: No VCS link available
 #!RemoteAsset
 Source0:        https://ftpmirror.gnu.org/gnu/%{name}/%{name}-%{version}/%{name}-%{version}.tar.gz
 #!RemoteAsset
