@@ -3,6 +3,7 @@
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: laokz <zhangkai@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -12,21 +13,29 @@ Release:        %autorelease
 Summary:        Administration and debugging tools for the XFS file system
 License:        GPL-1.0-or-later AND LGPL-2.1-or-later
 URL:            https://xfs.wiki.kernel.org
+VCS:            git:https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git
 #!RemoteAsset
 Source:         http://kernel.org/pub/linux/utils/fs/xfs/xfsprogs/%{name}-%{version}.tar.xz
 BuildSystem:    autotools
 
-BuildOption(conf): --enable-editline=yes
-BuildOption(conf): --enable-blkid=yes
-BuildOption(conf): --enable-lto=no
+BuildOption(conf):  --enable-editline=yes
+BuildOption(conf):  --enable-blkid=yes
+BuildOption(conf):  --enable-lto=no
+BuildOption(install):  DIST_ROOT=%{buildroot}
+BuildOption(install):  PKG_ROOT_SBIN_DIR=%{_sbindir}
+BuildOption(install):  PKG_ROOT_LIB_DIR=%{_libdir}
+BuildOption(install):  install-dev
 
-BuildOption(install): DIST_ROOT=%{buildroot}
-BuildOption(install): PKG_ROOT_SBIN_DIR=%{_sbindir}
-BuildOption(install): PKG_ROOT_LIB_DIR=%{_libdir}
-BuildOption(install): install-dev
+BuildRequires:  libtool
+BuildRequires:  pkgconfig(libattr)
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  pkgconfig(libacl)
+BuildRequires:  pkgconfig(inih)
+BuildRequires:  pkgconfig(liburcu)
+BuildRequires:  pkgconfig(libedit)
+BuildRequires:  util-linux-devel
 
-BuildRequires:  libtool attr-devel gcc gettext-devel acl-devel inih-devel userspace-rcu-devel
-BuildRequires:  libedit-devel util-linux-devel
 Requires:       libedit
 Requires:       python3
 
@@ -36,13 +45,12 @@ This package also includes the experimental xfs_scrub utility.
 
 %package        devel
 Summary:        Development files for the XFS filesystem library
-Requires:       xfsprogs = %{version}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       util-linux-devel
 
 %description    devel
 This package contains the header files for developing applications
 that use the XFS filesystem libraries.
-
 
 %install -a
 # remove unused files
