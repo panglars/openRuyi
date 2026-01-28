@@ -14,6 +14,7 @@ Summary:        Timezone data
 # https://data.iana.org/time-zones/tzdb-2025b/LICENSE
 License:        CC0-1.0 AND BSD-3-Clause
 URL:            https://www.iana.org/time-zones
+# VCS: No VCS link available
 #!RemoteAsset
 Source0:        https://www.iana.org/time-zones/repository/releases/tzdata%{version}.tar.gz
 #!RemoteAsset
