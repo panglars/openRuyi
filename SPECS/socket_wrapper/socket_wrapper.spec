@@ -11,6 +11,7 @@ Release:        %autorelease
 Summary:        A library passing all socket communications through Unix sockets
 License:        BSD-3-Clause
 URL:            http://cwrap.org/
+VCS:            git:https://git.samba.org/socket_wrapper.git
 #!RemoteAsset
 Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
 #!RemoteAsset
@@ -42,16 +43,16 @@ SOCKET_WRAPPER_DIR=/path/to/swrap_dir
 This package doesn't have a devel package because this project is for
 development/testing.
 
-%package  -n    libsocket_wrapper_noop
+%package     -n libsocket_wrapper_noop
 Summary:        A library providing dummies for socket_wrapper
 
 %description -n libsocket_wrapper_noop
 Applications with the need to call socket_wrapper_enabled() should link against
 -lsocket_wrapper_noop in order to resolve the symbol at link time.
 
-%package -n     libsocket_wrapper_noop-devel
+%package     -n libsocket_wrapper_noop-devel
 Summary:        Development headers for libsocket_wrapper_noop
-Requires:       libsocket_wrapper_noop = %{version}-%{release}
+Requires:       libsocket_wrapper_noop%{?_isa} = %{version}-%{release}
 
 %description -n libsocket_wrapper_noop-devel
 Development headers for applications with the need to call
