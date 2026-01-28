@@ -10,7 +10,8 @@ Version:        5.9
 Release:        %autorelease
 Summary:        Powerful interactive shell
 License:        MIT-Modern-Variant AND ISC AND GPL-2.0-only
-URL:            http://zsh.sourceforge.net/
+URL:            https://zsh.sourceforge.net/
+VCS:            git:git://git.code.sf.net/p/zsh/code
 #!RemoteAsset
 Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
 Source1:        zlogin.rhs
@@ -48,9 +49,9 @@ BuildRequires:  autoconf
 BuildRequires:  libtool
 BuildRequires:  coreutils
 BuildRequires:  gdbm-devel
-BuildRequires:  ncurses-devel
-BuildRequires:  pcre2-devel
-BuildRequires:  libcap-devel
+BuildRequires:  pkgconfig(ncurses)
+BuildRequires:  pkgconfig(libpcre2-posix)
+BuildRequires:  pkgconfig(libcap)
 BuildRequires:  texinfo
 
 Provides:       /bin/zsh
@@ -83,7 +84,7 @@ mechanism, and more.
 
 %package        html
 Summary:        Zsh shell manual in html format
-BuildArch:          noarch
+BuildArch:      noarch
 
 %description    html
 The zsh shell is a command interpreter usable as an interactive login
