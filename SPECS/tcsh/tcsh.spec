@@ -2,32 +2,37 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: ayostl <yao_xp@yeah.net>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
-Name:             tcsh
-Version:          6.24.15
-Release:          %autorelease
-Summary:          C shell with file name completion and command line editing
-License:          BSD
-URL:              http://www.tcsh.org/
+Name:           tcsh
+Version:        6.24.15
+Release:        %autorelease
+Summary:        C shell with file name completion and command line editing
+License:        BSD-3-Clause
+URL:            http://www.tcsh.org/
+VCS:            git:https://github.com/tcsh-org/tcsh.git
 #!RemoteAsset
-Source0:          https://astron.com/pub/%{name}/%{name}-%{version}.tar.gz
-BuildSystem:      autotools
+Source0:        https://astron.com/pub/%{name}/%{name}-%{version}.tar.gz
+BuildSystem:    autotools
+
+Patch0:         0001-fix-nice-case-fail-if-noroot.patch
 
 BuildOption(build):  all
 
-BuildRequires:    gettext-devel
-BuildRequires:    ncurses-devel
-BuildRequires:    autoconf
-BuildRequires:    gcc
-Requires(post):   coreutils
-Requires(post):   grep
-Requires(postun): sed
-Provides:         /bin/csh /bin/tcsh
-Provides:         csh = %{version}
+BuildRequires:  gettext-devel
+BuildRequires:  pkgconfig(ncurses)
+BuildRequires:  autoconf
+BuildRequires:  gcc
 
-Patch0:           0001-fix-nice-case-fail-if-noroot.patch
+Provides:       /bin/csh
+Provides:       /bin/tcsh
+Provides:       csh = %{version}-%{release}
+
+Requires(post): coreutils
+Requires(post):  grep
+Requires(postun): sed
 
 %description
 Tcsh is an enhanced but completely compatible version of the Berkeley
