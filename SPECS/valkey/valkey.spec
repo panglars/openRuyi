@@ -7,23 +7,25 @@
 
 # See https://github.com/valkey-io/valkey-doc/tags
 %global doc_version 8.1.1
-# Tests fail in mock, not in local build.
-%bcond_with tests
 
+%global make_flags DEBUG="" V="echo" PREFIX=%{buildroot}%{_prefix} BUILD_WITH_SYSTEMD=yes BUILD_TLS=module
+
+%global valkey_modules_abi 1
+%global valkey_modules_dir %{_libdir}/%{name}/modules
+%global valkey_modules_cfg %{_sysconfdir}/%{name}/modules
+
+# Tests fail in mock, not in local build.
+%bcond tests 0
 %bcond docs 0
 %bcond rdma 0
-%global make_flags DEBUG="" V="echo" PREFIX=%{buildroot}%{_prefix} BUILD_WITH_SYSTEMD=yes BUILD_TLS=module
+
 Name:           valkey
 Version:        8.1.4
 Release:        %autorelease
 Summary:        A persistent key-value database
-# valkey: BSD-3-Clause
-# hiredis: BSD-3-Clause
-# hdrhistogram, jemalloc, lzf, linenoise: BSD-2-Clause
-# lua: MIT
-# fpconv: BSL-1.0
 License:        BSD-3-Clause AND BSD-2-Clause AND MIT AND BSL-1.0
 URL:            https://valkey.io
+VCS:            git:https://github.com/valkey-io/valkey
 #!RemoteAsset
 Source0:        https://github.com/valkey-io/valkey/archive/%{version}/valkey-%{version}.tar.gz
 Source1:        valkey.logrotate
@@ -33,15 +35,16 @@ Source4:        valkey.sysusers
 Source5:        valkey.tmpfiles
 #!RemoteAsset
 Source50:       https://github.com/valkey-io/valkey-doc/archive/%{doc_version}/valkey-doc-%{doc_version}.tar.gz
+BuildSystem:    autotools
 
 # Fix default paths in configuration files for RPM layout
 Patch0:         valkey-conf.patch
 # Workaround to https://github.com/valkey-io/valkey/issues/2678
 Patch1:         valkey-loadmod.patch
 
-BuildSystem:    autotools
-BuildOption(build):   %{make_flags}
-BuildOption(install): %{make_flags}
+BuildOption(build):  %{make_flags}
+BuildOption(install):  %{make_flags}
+
 BuildRequires:  make
 BuildRequires:  gcc
 %if %{with tests}
@@ -49,9 +52,9 @@ BuildRequires:  procps-ng
 BuildRequires:  tcl
 %endif
 BuildRequires:  pkgconfig(libsystemd)
-BuildRequires:  systemd-devel
+BuildRequires:  pkgconfig(systemd)
 BuildRequires:  systemd-rpm-macros
-BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig(openssl)
 %if %{with docs}
 # for docs/man pages
 BuildRequires:  pandoc
@@ -59,27 +62,9 @@ BuildRequires:  python3
 BuildRequires:  python3-pyyaml
 %endif
 
-Requires:       logrotate
-# from deps/hiredis/hiredis.h
-Provides:       bundled(hiredis) = 1.0.3
-# from deps/jemalloc/VERSION
-Provides:       bundled(jemalloc) = 5.3.0
-# from deps/lua/src/lua.h
-Provides:       bundled(lua-libs) = 5.1.5
-# from deps/linenoise/linenoise.h
-Provides:       bundled(linenoise) = 1.0
-Provides:       bundled(lzf)
-# from deps/hdr_histogram/README.md
-Provides:       bundled(hdr_histogram) = 0.11.0
-# no version
-Provides:       bundled(fpconv)
-
-%global         valkey_modules_abi 1
-%global         valkey_modules_dir %{_libdir}/%{name}/modules
-%global         valkey_modules_cfg %{_sysconfdir}/%{name}/modules
 Provides:       valkey(modules_abi)%{?_isa} = %{valkey_modules_abi}
 
-ExcludeArch:    %{ix86}
+Requires:       logrotate
 
 %description
 Valkey is an advanced key-value store. It is often referred to as a data
@@ -132,10 +117,8 @@ Requires:       valkey = %{version}-%{release}
 Conflicts:      redis < 7.4
 BuildArch:      noarch
 
-
 %description    compat-redis
 %summary
-
 
 %package        compat-redis-devel
 Summary:        Compatibility development header for Redis API Valkey modules
@@ -144,11 +127,9 @@ Conflicts:      redis-devel < 7.4
 Conflicts:      redis-static < 7.4
 BuildArch:      noarch
 
-
 %description    compat-redis-devel
 Header file required for building loadable Valkey modules with the legacy
 Redis API.
-
 
 %if %{with docs}
 %package        doc
@@ -156,11 +137,9 @@ Summary:        Documentation and extra man pages for %{name}
 BuildArch:      noarch
 License:        CC-BY-SA-4.0
 
-
 %description    doc
 %summary
 %endif
-
 
 %prep
 # no autosetup due to no support for multiple source extraction
@@ -198,13 +177,11 @@ cat << 'EOF' | tee macros.%{name}
 %%valkey_modules_cfg %valkey_modules_cfg
 EOF
 
-
 : TLS configuration file
 cat << EOF | tee tls.conf
 # TLS module
 loadmodule %{valkey_modules_dir}/tls.so
 EOF
-
 
 %build -a
 
@@ -217,7 +194,6 @@ pushd %{name}-doc-%{doc_version}
 %make_build html VALKEY_ROOT=../
 popd
 %endif
-
 
 %install -a
 %if %{with docs}
@@ -283,31 +259,23 @@ ln -sr %{buildroot}/usr/lib/systemd/system/valkey-sentinel.service %{buildroot}/
 install -pm755 src/valkey-tls.so %{buildroot}%{valkey_modules_dir}/tls.so
 install -pm640 tls.conf          %{buildroot}%{valkey_modules_cfg}/tls.conf
 
-
 %check
 %if %{with tests}
 # https://github.com/redis/redis/issues/1417 (for "taskset -c 1")
 taskset -c 1 ./runtest --clients 50 --skiptest "Active defrag - AOF loading"
 %endif
 
-
-
 %post
-
 %systemd_post valkey.service
 %systemd_post valkey-sentinel.service
-
-
 
 %preun
 %systemd_preun valkey.service
 %systemd_preun valkey-sentinel.service
 
-
 %postun
 %systemd_postun_with_restart valkey.service
 %systemd_postun_with_restart valkey-sentinel.service
-
 
 %files
 %license COPYING
@@ -337,7 +305,6 @@ taskset -c 1 ./runtest --clients 50 --skiptest "Active defrag - AOF loading"
 %{_mandir}/man5/valkey.conf.5.gz
 %endif
 
-
 %if %{with docs}
 %files doc
 %license LICENSE
@@ -355,7 +322,6 @@ taskset -c 1 ./runtest --clients 50 --skiptest "Active defrag - AOF loading"
 %{_includedir}/valkeymodule.h
 %{_rpmmacrodir}/macros.%{name}
 
-
 %files compat-redis
 %{_bindir}/redis-*
 %{_unitdir}/redis.service
@@ -363,7 +329,6 @@ taskset -c 1 ./runtest --clients 50 --skiptest "Active defrag - AOF loading"
 
 %files compat-redis-devel
 %{_includedir}/redismodule.h
-
 
 %changelog
 %{?autochangelog}
