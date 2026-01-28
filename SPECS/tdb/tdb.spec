@@ -15,7 +15,6 @@ URL:            https://tdb.samba.org/
 # No VCS link available
 #!RemoteAsset
 Source:         https://samba.org/ftp/tdb/tdb-%{version}.tar.gz
-
 BuildSystem:    autotools
 
 BuildOption(conf):  --disable-rpath
@@ -23,7 +22,7 @@ BuildOption(conf):  --bundled-libraries=NONE
 BuildOption(conf):  --builtin-libraries=replace
 BuildOption(conf):  --without-gettext
 
-BuildRequires:  python3-devel
+BuildRequires:  pkgconfig(python3)
 
 %description
 The Tdb library implements a trivial database that is used by Samba and
@@ -31,7 +30,7 @@ other projects. It is extremely fast and designed for concurrent access.
 
 %package        tools
 Summary:        Command-line tools for managing Tdb databases
-Requires:       %{name} = %{version}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description    tools
 This package contains tools to create, view, and manage Tdb database files,
@@ -39,8 +38,8 @@ such as tdbdump and tdbtool.
 
 %package        devel
 Summary:        Development files for the Tdb library
-Requires:       %{name} = %{version}
-Requires:       tdb-tools = %{version}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}-tools%{?_isa} = %{version}-%{release}
 
 %description    devel
 This package contains the header files, pkg-config file, and development
@@ -48,7 +47,7 @@ documentation needed to build applications that use the Tdb library.
 
 %package     -n python-tdb
 Summary:        Python 3 bindings for the Tdb library
-Requires:       %{name} = %{version}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       python3-tdb
 %python_provide python3-tdb
 
