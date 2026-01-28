@@ -16,7 +16,7 @@ BuildArch:      noarch
 
 BuildRequires:  make
 BuildRequires:  desktop-file-utils
-BuildRequires:  python3-devel
+BuildRequires:  pkgconfig(python3)
 BuildRequires:  python3-pyudev
 BuildRequires:  python3-dbus
 BuildRequires:  pkgconfig(systemd)
