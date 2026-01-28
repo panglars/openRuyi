@@ -3,6 +3,7 @@
 # SPDX-FileContributor: Jingwiw <wangjingwei@iscas.ac.cn>
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <jialin.oerv@isrc.iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -12,6 +13,7 @@ Release:        %autorelease
 Summary:        Fast and versatile file copying tool for remote and local files
 License:        GPL-3.0-or-later
 URL:            https://rsync.samba.org/
+VCS:            git:https://github.com/RsyncProject/rsync.git
 #!RemoteAsset
 Source0:        https://rsync.samba.org/ftp/rsync/src/rsync-%{version}.tar.gz
 Source1:        rsyncd.conf
