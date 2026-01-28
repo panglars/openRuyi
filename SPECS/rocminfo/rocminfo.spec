@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: CHEN Xuan <chenxuan@iscas.ac.cn>
 # SPDX-FileContributor: Yifan Xu <xuyifan@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -24,7 +25,7 @@ BuildSystem:    cmake
 
 Patch0:         0001-adjust-CMAKE_CXX_FLAGS.patch
 
-BuildOption(conf):      -DROCM_DIR=%{_prefix}
+BuildOption(conf):  -DROCM_DIR=%{_prefix}
 
 BuildRequires:  make
 BuildRequires:  clang
