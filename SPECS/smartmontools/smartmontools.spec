@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: sunyuechi <sunyuechi@iscas.ac.cn>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -10,19 +11,20 @@ Version:        7.5
 Release:        %autorelease
 License:        GPL-2.0-or-later
 URL:            https://www.smartmontools.org/
+VCS:            git:https://github.com/smartmontools/smartmontools.git
 #!RemoteAsset
 Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Source1:        smartmontools.sysconf
 Source2:        smartmontools.tmpfiles
 BuildSystem:    autotools
 
-BuildOption(conf): --with-libcap-ng=yes
-BuildOption(conf): --with-libsystemd
-BuildOption(conf): --with-systemdsystemunitdir=%{_unitdir}
-BuildOption(conf): --sysconfdir=%{_sysconfdir}/%{name}/
-BuildOption(conf): --with-systemdenvfile=%{_sysconfdir}/sysconfig/%{name}
-BuildOption(build): CXXFLAGS="$RPM_OPT_FLAGS -fpie"
-BuildOption(build): LDFLAGS="-pie -Wl,-z,relro,-z,now"
+BuildOption(conf):  --with-libcap-ng=yes
+BuildOption(conf):  --with-libsystemd
+BuildOption(conf):  --with-systemdsystemunitdir=%{_unitdir}
+BuildOption(conf):  --sysconfdir=%{_sysconfdir}/%{name}/
+BuildOption(conf):  --with-systemdenvfile=%{_sysconfdir}/sysconfig/%{name}
+BuildOption(build):  CXXFLAGS="$RPM_OPT_FLAGS -fpie"
+BuildOption(build):  LDFLAGS="-pie -Wl,-z,relro,-z,now"
 
 BuildRequires:  make
 BuildRequires:  pkgconfig(readline)
