@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
+# SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -13,12 +14,12 @@ License:        BSD-2-Clause
 URL:            https://github.com/thkukuk/wtmpdb
 #!RemoteAsset
 Source:         https://github.com/thkukuk/wtmpdb/archive/v%{version}/%{name}-v%{version}.tar.gz
-
 BuildSystem:    meson
-BuildOption(conf): -Dman=enabled
-BuildOption(conf): -Dcompat-symlink=true
-BuildOption(conf): -Dwtmpdbd=enabled
-BuildOption(check): --no-rebuild
+
+BuildOption(conf):  -Dman=enabled
+BuildOption(conf):  -Dcompat-symlink=true
+BuildOption(conf):  -Dwtmpdbd=enabled
+BuildOption(check):  --no-rebuild
 
 BuildRequires:  docbook-xsl
 BuildRequires:  meson
@@ -28,7 +29,7 @@ BuildRequires:  pkgconfig(audit)
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(pam)
 BuildRequires:  pkgconfig(sqlite3)
-BuildRequires:  /usr/bin/xsltproc
+BuildRequires:  libxslt
 
 Provides:       util-linux:/usr/bin/last
 
@@ -38,11 +39,11 @@ utility. pam_wtmpdb collects all data in a sqlite3 database and the
 wtmpdb utility creates boot and shutdown entries or formats and
 prints the contents of the wtmp database.
 
-%package devel
+%package        devel
 Summary:        Development files for libwtmpdb
-Requires:       %{name} = %{version}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description devel
+%description    devel
 This package contains all necessary include files and libraries
 needed to develop applications that needs to read, write or modify
 the wtmpdb database.
