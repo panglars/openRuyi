@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: (C) 2025 Institute of Software, Chinese Academy of Sciences (ISCAS)
-# SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
+# SPDX-FileCopyrightText: (C) 2025, 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
+# SPDX-FileCopyrightText: (C) 2025, 2026 openRuyi Project Contributors
 # SPDX-FileContributor: yyjeqhc <1772413353@qq.com>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
@@ -49,6 +49,8 @@ BuildOption(conf): --with-nss
 %else
 BuildOption(conf): --without-nss
 %endif
+# The tests might fail under multi jobs.
+BuildOption(check): -j1
 
 BuildRequires:  gcc autoconf apr-devel expat-devel libuuid libxcrypt-devel
 
