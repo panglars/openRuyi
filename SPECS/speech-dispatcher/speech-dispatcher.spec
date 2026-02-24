@@ -40,7 +40,6 @@ BuildOption(conf):  --with-flite
 BuildRequires:  make
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  libtool-ltdl-devel
 BuildRequires:  pkgconfig(sndfile)
 BuildRequires:  pulseaudio-devel
 BuildRequires:  pkgconfig(alsa)

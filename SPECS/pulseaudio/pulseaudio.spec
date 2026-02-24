@@ -65,7 +65,7 @@ BuildRequires:  pkgconfig(sndfile)
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(x11-xcb)
 BuildRequires:  pkgconfig(fftw3f)
-BuildRequires:  libtool-ltdl-devel
+BuildRequires:  libtool
 BuildRequires:  pkgconfig(libcap)
 BuildRequires:  perl-XML-Parser
 BuildRequires:  xmltoman

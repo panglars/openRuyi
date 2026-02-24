@@ -33,7 +33,6 @@ BuildRequires:  make
 BuildRequires:  automake
 BuildRequires:  autoconf
 BuildRequires:  libtool
-BuildRequires:  libtool-ltdl-devel
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  pkgconfig(readline)

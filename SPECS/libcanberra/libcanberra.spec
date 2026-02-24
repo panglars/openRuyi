@@ -29,7 +29,7 @@ BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  alsa-lib-devel
 BuildRequires:  pkgconfig(vorbis)
-BuildRequires:  libtool-ltdl-devel
+BuildRequires:  libtool
 BuildRequires:  pulseaudio-devel
 BuildRequires:  pkgconfig(gstreamer-1.0)
 BuildRequires:  pkgconfig(tdb)
