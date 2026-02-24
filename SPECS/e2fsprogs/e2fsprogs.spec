@@ -43,8 +43,6 @@ BuildRequires:  perl
 BuildRequires:  systemd-rpm-macros
 %endif
 Requires(post): /usr/bin/mkdir /usr/bin/touch
-Requires:       libcom_err2
-Requires:       libext2fs2
 Suggests:       e2fsprogs-scrub
 
 %description
@@ -112,7 +110,7 @@ make -C po update-po
 find %{buildroot} -type f -name "*.a" -delete
 rm -f %{buildroot}%{_libdir}/e2initrd_helper
 
-%find_lang e2fsprogs
+%find_lang e2fsprogs --generate-subpackages
 
 %if %{with systemd}
 %pre -n e2fsprogs-scrub
@@ -124,21 +122,24 @@ rm -f %{buildroot}%{_libdir}/e2initrd_helper
 %systemd_postun e2scrub@.service e2scrub_all.service e2scrub_all.timer e2scrub_fail@.service e2scrub_reap.service
 %endif
 
-%files -f e2fsprogs.lang
+%files
 %doc doc/RelNotes/v%{version}.txt README
 %license NOTICE
 %config /etc/mke2fs.conf
-%{_sbindir}/*
 %{_bindir}/*
 %{_infodir}/libext2fs.info.gz
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 %{_mandir}/man8/*
+%exclude %{_bindir}/compile_et
+%exclude %{_bindir}/mk_cmds
+%exclude %{_bindir}/e2scrub
+%exclude %{_bindir}/e2scrub_all
 
 %files -n e2fsprogs-scrub
 %config /etc/e2scrub.conf
-%{_sbindir}/e2scrub
-%{_sbindir}/e2scrub_all
+%{_bindir}/e2scrub
+%{_bindir}/e2scrub_all
 %if %{with systemd}
 %{_libexecdir}/e2fsprogs/
 %{_unitdir}/e2scrub@.service
