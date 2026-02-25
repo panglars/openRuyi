@@ -87,6 +87,7 @@ This package provides the core configuration and setup files for D-Bus.
 
 %package        tools
 Summary:        Command-line tools for D-Bus
+Provides:       dbus-daemon = %{version}-%{release}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description    tools
