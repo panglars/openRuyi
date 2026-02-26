@@ -32,7 +32,7 @@ BuildRequires:  kf6-extra-cmake-modules >= 6.22.0
 BuildRequires:  qt6-base-private-devel >= 6.8.0
 BuildRequires:  cmake(Qt6GuiPrivate)
 BuildRequires:  cmake(Qt6LinguistTools)
-BuildRequires:  qt6-tools
+BuildRequires:  qt6-qttools
 BuildRequires:  qt6-doctools
 BuildRequires:  qt6-linguist
 BuildRequires:  pkgconfig(wayland-protocols) >= 1.21.0

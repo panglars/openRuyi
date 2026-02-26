@@ -44,7 +44,7 @@ BuildRequires:  cmake(Qt6ToolsTools) >= %{qt6_version}
 BuildRequires:  cmake(Qt6Widgets) >= %{qt6_version}
 BuildRequires:  pkgconfig(libsecret-1)
 BuildRequires:  qt6-base-private-devel >= %{qt6_version}
-BuildRequires:  qt6-tools
+BuildRequires:  qt6-qttools
 BuildRequires:  qt6-doctools
 BuildRequires:  qt6-linguist
 BuildRequires:  docbook-xsl

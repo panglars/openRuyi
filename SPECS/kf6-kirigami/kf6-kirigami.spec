@@ -34,7 +34,7 @@ BuildRequires:  cmake(Qt6Svg) >= %{qt6_version}
 BuildRequires:  cmake(Qt6ToolsTools) >= %{qt6_version}
 Requires:       qt6-declarative >= %{qt6_version}
 Requires:       qt6-qt5compat >= %{qt6_version}
-BuildRequires:  qt6-tools
+BuildRequires:  qt6-qttools
 BuildRequires:  qt6-doctools
 BuildRequires:  qt6-linguist
 

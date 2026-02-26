@@ -30,7 +30,7 @@ BuildRequires:  cmake(Qt6OpenGL) >= %{qt6_version}
 BuildRequires:  cmake(Qt6Test) >= %{qt6_version}
 BuildRequires:  cmake(Qt6ToolsTools) >= %{qt6_version}
 BuildRequires:  pkgconfig(x11)
-BuildRequires:  qt6-tools
+BuildRequires:  qt6-qttools
 BuildRequires:  qt6-doctools
 BuildRequires:  qt6-linguist
 

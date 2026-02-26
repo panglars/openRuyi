@@ -29,7 +29,7 @@ BuildRequires:  cmake(KF6GuiAddons) >= %{_kf6_version}
 BuildRequires:  cmake(KF6I18n) >= %{_kf6_version}
 BuildRequires:  cmake(Qt6Gui) >= %{qt6_version}
 BuildRequires:  cmake(Qt6ToolsTools) >= %{qt6_version}
-BuildRequires:  qt6-tools
+BuildRequires:  qt6-qttools
 BuildRequires:  qt6-doctools
 BuildRequires:  qt6-linguist
 

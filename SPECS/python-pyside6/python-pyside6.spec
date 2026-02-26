@@ -45,7 +45,7 @@ BuildRequires:  python3dist(setuptools)
 BuildRequires:  python3dist(wheel)
 BuildRequires:  python3dist(packaging)
 BuildRequires:  qt6-macros
-BuildRequires:  qt6-tools
+BuildRequires:  qt6-qttools
 BuildRequires:  qt6-doctools
 BuildRequires:  pkgconfig(libffi)
 BuildRequires:  pkgconfig(libxslt)
