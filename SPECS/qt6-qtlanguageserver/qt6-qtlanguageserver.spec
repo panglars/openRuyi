@@ -8,7 +8,7 @@
 %define real_version 6.10.1
 %define short_version 6.10
 
-Name:           qt6-languageserver
+Name:           qt6-qtlanguageserver
 Version:        6.10.1
 Release:        %autorelease
 Summary:        Qt6 - LanguageServer component
