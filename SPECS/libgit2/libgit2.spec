@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 Name:           libgit2
-Version:        1.9.1
+Version:        1.9.2
 Release:        %autorelease
 Summary:        C implementation of the Git core methods as a library with a solid API
 License:        GPL-2.0-only WITH GCC-exception-2.0
