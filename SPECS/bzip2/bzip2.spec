@@ -5,6 +5,8 @@
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
+%define soname_version 1.0
+
 Name:           bzip2
 Version:        1.0.8
 Release:        %autorelease
@@ -73,7 +75,8 @@ ln -s bzdiff $RPM_BUILD_ROOT%{_bindir}/bzcmp
 ln -s bzmore $RPM_BUILD_ROOT%{_bindir}/bzless
 ln -s bzgrep $RPM_BUILD_ROOT%{_bindir}/bzegrep
 ln -s bzgrep $RPM_BUILD_ROOT%{_bindir}/bzfgrep
-ln -s libbz2.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libbz2.so.1
+ln -s libbz2.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libbz2.so.%{soname_version}
+ln -s libbz2.so.%{soname_version} $RPM_BUILD_ROOT%{_libdir}/libbz2.so.1
 ln -s libbz2.so.1 $RPM_BUILD_ROOT%{_libdir}/libbz2.so
 ln -s bzip2.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzip2recover.1
 ln -s bzip2.1 $RPM_BUILD_ROOT%{_mandir}/man1/bunzip2.1
