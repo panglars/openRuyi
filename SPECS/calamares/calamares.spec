@@ -56,7 +56,7 @@ Requires:       dracut
 Requires:       grub
 Requires:       e2fsprogs
 Requires:       dosfstools
-Requires:       ntfsprogs
+Requires:       ntfs-3g
 Requires:       gawk
 Requires:       systemd
 Requires:       rsync
