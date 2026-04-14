@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global srcname concurrent-log-handler
-%global modname concurrent_log_handler
+%global pypi_name concurrent_log_handler
 
 Name:           python-%{srcname}
 Version:        0.9.29
@@ -14,17 +14,17 @@ Summary:        Concurrent log handler with file rotation support
 License:        Apache-2.0
 URL:            https://github.com/Preston-Landers/concurrent-log-handler
 #!RemoteAsset:  sha256:bc37a76d3f384cbf4a98f693ebd770543edc0f4cd5c6ab6bc70e9e1d7d582265
-Source0:        https://files.pythonhosted.org/packages/source/c/%{srcname}/%{modname}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/c/%{srcname}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    pyproject
 
-BuildOption(install):  -l %{modname}
+BuildOption(install):  -l %{pypi_name}
 
 BuildRequires:  pyproject-rpm-macros
 BuildRequires:  pkgconfig(python3)
 BuildRequires:  python3dist(hatchling)
 
-Provides:       python3-%{srcname}
+Provides:       python3-%{srcname} = %{version}-%{release}
 %python_provide python3-%{srcname}
 
 %description
@@ -34,9 +34,6 @@ processes and threads, with size-based and time-based rotation support.
 
 %generate_buildrequires
 %pyproject_buildrequires -r
-
-%check
-%pyproject_check_import
 
 %files -f %{pyproject_files}
 %license LICENSE

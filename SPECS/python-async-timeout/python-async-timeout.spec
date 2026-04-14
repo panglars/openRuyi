@@ -29,7 +29,7 @@ BuildRequires:  python3dist(wheel)
 BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(pytest-asyncio)
 
-Provides:       python3-%{srcname}
+Provides:       python3-%{srcname} = %{version}-%{release}
 %python_provide python3-%{srcname}
 
 %description
@@ -38,7 +38,8 @@ Asyncio-compatible timeout context manager for Python programs.
 %generate_buildrequires
 %pyproject_buildrequires
 
-%check
+%check -a
+# Upstream pytest addopts enable coverage; clear them to run tests without pytest-cov.
 %pytest -o "addopts=" -v tests/test_timeout.py
 
 %files -f %{pyproject_files}

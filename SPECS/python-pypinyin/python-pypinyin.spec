@@ -26,7 +26,7 @@ BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(setuptools)
 BuildRequires:  python3dist(wheel)
 
-Provides:       python3-%{srcname}
+Provides:       python3-%{srcname} = %{version}-%{release}
 %python_provide python3-%{srcname}
 
 %description
@@ -36,9 +36,8 @@ command line tool.
 %generate_buildrequires
 %pyproject_buildrequires
 
-%check
-%pyproject_check_import
-%{python3} -m pytest -q -s
+%check -a
+%pytest
 
 %files -f %{pyproject_files}
 %doc CHANGELOG.rst README.rst
