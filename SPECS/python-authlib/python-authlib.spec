@@ -18,6 +18,7 @@ BuildArch:      noarch
 BuildSystem:    pyproject
 
 BuildOption(install):  -l %{srcname} +auto
+# No modules named django,flask,https_client,sqla_oauth2,starlette_client
 BuildOption(check):  -e 'authlib.integrations.django_*'
 BuildOption(check):  -e 'authlib.integrations.flask_*'
 BuildOption(check):  -e 'authlib.integrations.httpx_client*'

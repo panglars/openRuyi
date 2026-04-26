@@ -18,6 +18,7 @@ BuildArch:      noarch
 BuildSystem:    pyproject
 
 BuildOption(install):  -l %{srcname} -L
+# upstream ships test modules that require pytest
 BuildOption(check):  -e 'pycountry.tests.*'
 
 BuildRequires:  pyproject-rpm-macros

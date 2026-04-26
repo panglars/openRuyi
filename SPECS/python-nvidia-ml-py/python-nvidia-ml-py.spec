@@ -13,7 +13,6 @@ Release:        %autorelease
 Summary:        Python bindings for the NVIDIA Management Library
 License:        BSD-3-Clause
 URL:            https://forums.developer.nvidia.com
-# VCS: No VCS link available
 #!RemoteAsset:  sha256:c9f34897fe0441ff35bc8f35baf80f830a20b0f4e6ce71e0a325bc0e66acf079
 Source0:        https://files.pythonhosted.org/packages/source/n/%{srcname}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
