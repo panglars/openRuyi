@@ -120,8 +120,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 This package provides the PHP extension for zlib compression support.
 
 %check -p
-# Reason: these tests depend on OBS worker environment details, unavailable
-# optional extensions, or file-cache paths rather than extension build success.
+# These tests can't run on OBS worker, disabled
 find . -type f -name '*.phpt' \
     ! -path './ext/curl/tests/curl_setopt_ssl.phpt' \
     ! -path './ext/opcache/tests/bug78185.phpt' \
