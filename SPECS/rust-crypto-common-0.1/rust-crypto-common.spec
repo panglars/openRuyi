@@ -5,25 +5,29 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global crate_name crypto-common
-%global full_version 0.1.6
+%global full_version 0.1.7
 %global pkgname crypto-common-0.1
 
 Name:           rust-crypto-common-0.1
-Version:        0.1.6
+Version:        0.1.7
 Release:        %autorelease
 Summary:        Rust crate "crypto-common"
 License:        MIT OR Apache-2.0
 URL:            https://github.com/RustCrypto/traits
-#!RemoteAsset:  sha256:1bfb12502f3fc46cca1bb51ac28df9d618d813cdc3d2f25b9fe775a34af26bb3
+#!RemoteAsset:  sha256:78c8292055d1c1df0cce5d180393dc8cce0abec0a7102adb6c7b1eef6016d60a
 Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    rustcrates
 
+# Allow building against the packaged generic-array 0.14.x compatibility crate.
+Patch2000:      2000-relax-generic-array-dependency.patch
+
 BuildRequires:  rust-rpm-macros
 
-Requires:       crate(generic-array-0.14/default) >= 0.14.9
-Requires:       crate(generic-array-0.14/more-lengths) >= 0.14.9
-Requires:       crate(typenum-1.0/default) >= 1.19.0
+Requires:       crate(generic-array-0.14/default) >= 0.14.7
+Requires:       crate(generic-array-0.14/more-lengths) >= 0.14.7
+Requires:       crate(typenum-1.0/default) >= 1.14
+Provides:       crate(crypto-common) = %{version}
 Provides:       crate(%{pkgname})
 Provides:       crate(%{pkgname}/default)
 Provides:       crate(%{pkgname}/std)

@@ -1,0 +1,15 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 6bf8f87..26c04c1 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -43,7 +43,7 @@ name = "crypto_common"
+ path = "src/lib.rs"
+ 
+ [dependencies.generic-array]
+-version = "=0.14.7"
++version = "0.14.7"
+ features = ["more_lengths"]
+ 
+ [dependencies.rand_core]
+-- 
+2.49.0
