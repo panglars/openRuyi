@@ -19,6 +19,9 @@ Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/do
 BuildArch:      noarch
 BuildSystem:    rustcrates
 
+# Allow building against the packaged generic-array 0.14.x compatibility crate.
+Patch0:         2000-relax-generic-array-dependency.patch
+
 BuildRequires:  rust-rpm-macros
 
 Requires:       crate(generic-array-0.14/default) >= 0.14.7
