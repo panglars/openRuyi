@@ -4,6 +4,7 @@
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: yyjeqhc <jialin.oerv@isrc.iscas.ac.cn>
 # SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
+# SPDX-FileContributor: panglars <panghao.riscv@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -25,13 +26,13 @@
 %global rust_env %{rust_env} RUST_BACKTRACE=1
 
 Name:           rust
-Version:        1.94.1
+Version:        1.95.0
 Release:        %autorelease
 Summary:        Rust systems programming language
 License:        MIT AND Apache-2.0
 URL:            http://www.rust-lang.org/
 VCS:            git:https://github.com/rust-lang/rust.git
-#!RemoteAsset:  sha256:174fce10ce012317ca995810296d8af199318838180b03d68a853e0f02d4b571
+#!RemoteAsset:  sha256:62b67230754da642a264ca0cb9fc08820c54e2ed7b3baba0289876d4cdb48c08
 Source0:        https://static.rust-lang.org/dist/rustc-%{version}-src.tar.xz
 Source1:        rust-openruyi.toml.in
 
@@ -59,9 +60,9 @@ BuildRequires:  pkgconfig(zlib)
 BuildRequires:  python3
 BuildRequires:  findutils
 %if %{with rust_bin}
-BuildRequires:  rust-bin >= 1.93.0
+BuildRequires:  rust-bin >= 1.94.0
 %else
-BuildRequires:  rust >= 1.93.0
+BuildRequires:  rust >= 1.94.0
 %endif
 # For tests.
 BuildRequires:  git-core
