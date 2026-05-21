@@ -8,7 +8,7 @@ Name:           sway
 Version:        1.11
 Release:        %autorelease
 Summary:        i3-compatible Wayland compositor
-License:        MIT AND CC0-1.0
+License:        MIT
 URL:            https://github.com/swaywm/sway
 VCS:            git:https://github.com/swaywm/sway.git
 #!RemoteAsset:  sha256:0e37a55b7c3379230e97e1ad982542b75016a0c7d6676198604e557f9b373dae
@@ -60,8 +60,8 @@ Sway is an i3-compatible Wayland compositor.
 install -d %{buildroot}%{_sysconfdir}/sway/config.d
 
 %files
-%license LICENSE assets/LICENSE
 %doc README.md
+%license LICENSE assets/LICENSE
 %dir %{_sysconfdir}/sway
 %dir %{_sysconfdir}/sway/config.d
 %config(noreplace) %{_sysconfdir}/sway/config
