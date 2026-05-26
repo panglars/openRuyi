@@ -5,16 +5,16 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global crate_name clap_derive
-%global full_version 4.6.0
+%global full_version 4.6.1
 %global pkgname clap-derive-4.0
 
 Name:           rust-clap-derive-4.0
-Version:        4.6.0
+Version:        4.6.1
 Release:        %autorelease
 Summary:        Rust crate "clap_derive"
 License:        MIT OR Apache-2.0
 URL:            https://github.com/clap-rs/clap
-#!RemoteAsset:  sha256:1110bd8a634a1ab8cb04345d8d878267d57c3cf1b38d91b71af6686408bbca6a
+#!RemoteAsset:  sha256:f2ce8604710f6733aa641a2b3731eaa1e8b3d9973d5e3565da11800813f997a9
 Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    rustcrates
@@ -26,6 +26,7 @@ Requires:       crate(proc-macro2-1.0/default) >= 1.0.106
 Requires:       crate(quote-1.0/default) >= 1.0.45
 Requires:       crate(syn-2.0/default) >= 2.0.117
 Requires:       crate(syn-2.0/full) >= 2.0.117
+Provides:       crate(clap-derive) = %{version}
 Provides:       crate(%{pkgname})
 Provides:       crate(%{pkgname}/debug)
 Provides:       crate(%{pkgname}/default)
@@ -39,8 +40,8 @@ Source code for takopackized Rust crate "clap_derive"
 %package     -n %{name}+unstable-markdown
 Summary:        Parse command line argument by defining a struct, derive crate - feature "unstable-markdown"
 Requires:       crate(%{pkgname})
-Requires:       crate(anstyle-1.0/default) >= 1.0.13
-Requires:       crate(pulldown-cmark-0.13) >= 0.13.1
+Requires:       crate(anstyle-1.0/default) >= 1.0.14
+Requires:       crate(pulldown-cmark-0.13) >= 0.13.3
 Provides:       crate(%{pkgname}/unstable-markdown)
 
 %description -n %{name}+unstable-markdown
