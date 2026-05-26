@@ -5,28 +5,27 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global crate_name typenum
-%global full_version 1.19.0
+%global full_version 1.20.0
 %global pkgname typenum-1.0
 
 Name:           rust-typenum-1.0
-Version:        1.19.0
+Version:        1.20.0
 Release:        %autorelease
 Summary:        Rust crate "typenum"
 License:        MIT OR Apache-2.0
 URL:            https://github.com/paholg/typenum
-#!RemoteAsset:  sha256:562d481066bde0658276a35467c4af00bdc6ee726305698a55b86e61d7ad82bb
+#!RemoteAsset:  sha256:40ce102ab67701b8526c123c1bab5cbe42d7040ccfd0f64af1a385808d2f43de
 Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    rustcrates
 
 BuildRequires:  rust-rpm-macros
 
+Provides:       crate(typenum) = %{version}
 Provides:       crate(%{pkgname})
 Provides:       crate(%{pkgname}/const-generics)
 Provides:       crate(%{pkgname}/default)
-Provides:       crate(%{pkgname}/force-unix-path-separator)
 Provides:       crate(%{pkgname}/i128)
-Provides:       crate(%{pkgname}/no-std)
 Provides:       crate(%{pkgname}/strict)
 
 %description
