@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: (C) 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2026 openRuyi Project Contributors
+# SPDX-FileContributor: panglars <panghao.riscv@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -20,8 +21,9 @@ BuildSystem:    rustcrates
 
 BuildRequires:  rust-rpm-macros
 
-Requires:       crate(cfg-if-1.0/default) >= 1.0.3
+Requires:       crate(cfg-if-1.0/default) >= 1.0.4
 Requires:       crate(cpufeatures-0.3/default) >= 0.3.0
+Provides:       crate(chacha20) = %{version}
 Provides:       crate(%{pkgname})
 
 %description
@@ -47,7 +49,7 @@ Additionally, this package also provides the "default", "legacy", and "xchacha" 
 %package     -n %{name}+rng
 Summary:        ChaCha20 stream cipher (RFC 8439) implemented in pure Rust using traits from the RustCrypto `cipher` crate, with optional architecture-specific hardware acceleration (AVX2, SSE2) - feature "rng"
 Requires:       crate(%{pkgname})
-Requires:       crate(rand-core-0.10) >= 0.10.0
+Requires:       crate(rand-core-0.10) >= 0.10.1
 Provides:       crate(%{pkgname}/rng)
 
 %description -n %{name}+rng
