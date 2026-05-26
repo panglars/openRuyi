@@ -5,22 +5,23 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global crate_name libredox
-%global full_version 0.1.15
+%global full_version 0.1.16
 %global pkgname libredox-0.1
 
 Name:           rust-libredox-0.1
-Version:        0.1.15
+Version:        0.1.16
 Release:        %autorelease
 Summary:        Rust crate "libredox"
 License:        MIT
 URL:            https://gitlab.redox-os.org/redox-os/libredox.git
-#!RemoteAsset:  sha256:7ddbf48fd451246b1f8c2610bd3b4ac0cc6e149d89832867093ab69a17194f08
+#!RemoteAsset:  sha256:e02f3bb43d335493c96bf3fd3a321600bf6bd07ed34bc64118e9293bdffea46c
 Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    rustcrates
 
 BuildRequires:  rust-rpm-macros
 
+Provides:       crate(libredox) = %{version}
 Provides:       crate(%{pkgname})
 
 %description
@@ -29,7 +30,7 @@ Source code for takopackized Rust crate "libredox"
 %package     -n %{name}+bitflags
 Summary:        Redox stable ABI - feature "bitflags"
 Requires:       crate(%{pkgname})
-Requires:       crate(bitflags-2.0/default) >= 2.11.0
+Requires:       crate(bitflags-2.0/default) >= 2.0.0
 Provides:       crate(%{pkgname}/bitflags)
 
 %description -n %{name}+bitflags
@@ -63,7 +64,7 @@ Additionally, this package also provides the "mkns" feature.
 %package     -n %{name}+libc
 Summary:        Redox stable ABI - feature "libc" and 3 more
 Requires:       crate(%{pkgname})
-Requires:       crate(libc-0.2/default) >= 0.2.184
+Requires:       crate(libc-0.2/default) >= 0.2.186
 Provides:       crate(%{pkgname}/base)
 Provides:       crate(%{pkgname}/call)
 Provides:       crate(%{pkgname}/libc)
@@ -77,7 +78,7 @@ Additionally, this package also provides the "base", "call", and "std" features.
 %package     -n %{name}+plain
 Summary:        Redox stable ABI - feature "plain"
 Requires:       crate(%{pkgname})
-Requires:       crate(plain-0.2/default) >= 0.2.3
+Requires:       crate(plain-0.2/default) >= 0.2.0
 Provides:       crate(%{pkgname}/plain)
 
 %description -n %{name}+plain
@@ -97,7 +98,7 @@ This metapackage enables feature "protocol" for the Rust libredox crate, by pull
 %package     -n %{name}+redox-syscall
 Summary:        Redox stable ABI - feature "redox_syscall"
 Requires:       crate(%{pkgname})
-Requires:       crate(redox-syscall-0.7/default) >= 0.7.3
+Requires:       crate(redox-syscall-0.7/default) >= 0.7.0
 Provides:       crate(%{pkgname}/redox-syscall)
 
 %description -n %{name}+redox-syscall
