@@ -1,19 +1,20 @@
 # SPDX-FileCopyrightText: (C) 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2026 openRuyi Project Contributors
+# SPDX-FileContributor: panglars <panghao.riscv@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global crate_name inotify
-%global full_version 0.11.0
+%global full_version 0.11.1
 %global pkgname inotify-0.11
 
 Name:           rust-inotify-0.11
-Version:        0.11.0
+Version:        0.11.1
 Release:        %autorelease
 Summary:        Rust crate "inotify"
 License:        ISC
 URL:            https://github.com/hannobraun/inotify
-#!RemoteAsset:  sha256:f37dccff2791ab604f9babef0ba14fbe0be30bd368dc541e2b08d07c8aa908f3
+#!RemoteAsset:  sha256:bd5b3eaf1a28b758ac0faa5a4254e8ab2705605496f1b1f3fbbc3988ad73d199
 Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    rustcrates
@@ -23,6 +24,7 @@ BuildRequires:  rust-rpm-macros
 Requires:       crate(bitflags-2.0/default) >= 2.11.1
 Requires:       crate(inotify-sys-0.1/default) >= 0.1.5
 Requires:       crate(libc-0.2/default) >= 0.2.186
+Provides:       crate(inotify) = %{version}
 Provides:       crate(%{pkgname})
 
 %description
@@ -31,7 +33,7 @@ Source code for takopackized Rust crate "inotify"
 %package     -n %{name}+futures-core
 Summary:        Idiomatic wrapper for inotify - feature "futures-core"
 Requires:       crate(%{pkgname})
-Requires:       crate(futures-core-0.3/default) >= 0.3.1
+Requires:       crate(futures-core-0.3/default) >= 0.3.30
 Provides:       crate(%{pkgname}/futures-core)
 
 %description -n %{name}+futures-core
@@ -53,8 +55,8 @@ Additionally, this package also provides the "default" feature.
 %package     -n %{name}+tokio
 Summary:        Idiomatic wrapper for inotify - feature "tokio"
 Requires:       crate(%{pkgname})
-Requires:       crate(tokio-1.0/default) >= 1.0.1
-Requires:       crate(tokio-1.0/net) >= 1.0.1
+Requires:       crate(tokio-1.0/default) >= 1.40.0
+Requires:       crate(tokio-1.0/net) >= 1.40.0
 Provides:       crate(%{pkgname}/tokio)
 
 %description -n %{name}+tokio
