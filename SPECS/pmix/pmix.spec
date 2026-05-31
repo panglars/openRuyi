@@ -17,6 +17,7 @@ BuildSystem:    autotools
 
 BuildOption(conf):  --disable-static
 BuildOption(conf):  --disable-wrapper-rpath
+BuildOption(conf):  --disable-wrapper-runpath
 BuildOption(conf):  --with-hwloc
 BuildOption(conf):  --with-libevent
 BuildOption(conf):  --with-zlib
@@ -48,6 +49,13 @@ This package contains headers, the PMIx wrapper compiler, pkgconfig
 metadata, and shared object symbolic links for developing applications
 against PMIx.
 
+%package        doc
+Summary:        Documentation for PMIx
+BuildArch:      noarch
+
+%description    doc
+HTML documentation for PMIx.
+
 %install -a
 rm -f %{buildroot}%{_libdir}/libpmix.la
 rm -f %{buildroot}%{_libdir}/pmix/*.la
@@ -55,6 +63,7 @@ rm -f %{buildroot}%{_libdir}/pmix/*.la
 %files
 %license LICENSE
 %doc AUTHORS README.md VERSION
+%config(noreplace) %{_sysconfdir}/pmix-mca-params.conf
 %{_bindir}/palloc
 %{_bindir}/pattrs
 %{_bindir}/pctrl
@@ -88,6 +97,10 @@ rm -f %{buildroot}%{_libdir}/pmix/*.la
 %{_mandir}/man3/PMIx_Finalize.3*
 %{_mandir}/man3/PMIx_Init.3*
 %{_mandir}/man5/openpmix.5*
+
+%files doc
+%license LICENSE
+%doc %{_docdir}/pmix/html
 
 %changelog
 %autochangelog
