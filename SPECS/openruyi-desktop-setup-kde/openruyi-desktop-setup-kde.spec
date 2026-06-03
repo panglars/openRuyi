@@ -27,7 +27,7 @@ Requires:       dolphin
 Requires:       kf6-kwindowsystem
 Requires:       kf6-kcoreaddons
 Requires:       kf6-kcmutils
-Requires:       kf6-kconfig-imports
+Requires:       kf6-kconfig
 Requires:       kf6-qqc2-desktop-style
 
 Recommends:     discover
