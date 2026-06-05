@@ -16,13 +16,13 @@
 %{!?_plasma6_version: %define _plasma6_version %(echo %{_plasma6_bugfix} | awk -F. '{print $1"."$2}')}
 
 Name:           kwin
-Version:        6.5.5
+Version:        6.6.5
 Release:        %autorelease
 Summary:        KDE Window Manager
 License:        GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            https://www.kde.org
 VCS:            git:https://invent.kde.org/plasma/kwin.git
-#!RemoteAsset:  sha256:8c4aab73edd7b289468e52beac34e490bc43187476d8621cdde8701e6c7d5640
+#!RemoteAsset:  sha256:c99ca0affeaf9e6bdacfb06cac86677fcf3e4d93aae09b05f1f8986a12ec5e65
 Source:         https://invent.kde.org/plasma/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 BuildSystem:    cmake
 
@@ -217,6 +217,7 @@ This package provides development files.
 %{_kf6_plugindir}/kwin/plugins/KeyNotificationPlugin.so
 %{_kf6_plugindir}/kwin/plugins/StickyKeysPlugin.so
 %{_kf6_plugindir}/kwin/plugins/buttonsrebind.so
+%{_kf6_plugindir}/kwin/plugins/SlowKeysPlugin.so
 %{_kf6_plugindir}/kwin/plugins/eis.so
 %{_kf6_plugindir}/kwin/plugins/krunnerintegration.so
 %{_kf6_plugindir}/kwin/plugins/nightlight.so
