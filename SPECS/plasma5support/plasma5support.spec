@@ -14,13 +14,13 @@
 %{!?_kf6_bugfix_version: %define _kf6_bugfix_version %(echo %{_kf6_version} | awk -F. '{print $1"."$2}')}
 
 Name:           plasma5support
-Version:        6.5.5
+Version:        6.6.5
 Release:        %autorelease
 Summary:        KF6 Porting aid
 License:        LGPL-2.0-or-later
 URL:            https://www.kde.org
 VCS:            git:https://invent.kde.org/plasma/plasma5support
-#!RemoteAsset:  sha256:20f28a6e10b9909cc6e4c28eaa0c3ccbaf5e2ab92733f62c12bebabce3032606
+#!RemoteAsset:  sha256:f954f2a8f80d977d96ead252da31054f01adfff0a5fcd9f15e13b0cfc37aa93c
 Source:         https://invent.kde.org/plasma/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 BuildSystem:    cmake
 
@@ -113,6 +113,8 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/*@*
 %{_kf6_plugindir}/plasma5support/dataengine/plasma_engine_noaa.so
 %{_kf6_plugindir}/plasma5support/dataengine/plasma_engine_weather.so
 %{_kf6_plugindir}/plasma5support/dataengine/plasma_engine_wettercom.so
+%{_kf6_plugindir}/plasma5support/dataengine/plasma_engine_executable.so
+%{_kf6_plugindir}/plasma5support/dataengine/plasma_engine_time.so
 %dir %{_kf6_plugindir}/plasma5support/geolocationprovider
 %{_kf6_plugindir}/plasma5support/geolocationprovider/plasma-geolocation-gps.so
 %{_kf6_plugindir}/plasma5support/geolocationprovider/plasma-geolocation-ip.so
