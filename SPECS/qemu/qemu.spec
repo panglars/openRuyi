@@ -177,13 +177,13 @@
 %global qemudocdir %{_docdir}/%{name}
 
 Name:           qemu
-Version:        10.2.0
+Version:        11.0.1
 Release:        %autorelease
 Summary:        Machine emulator and virtualizer
 License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:            http://www.qemu.org/
 VCS:            git:https://gitlab.com/qemu-project/qemu
-#!RemoteAsset:  sha256:9e30ad1b8b9f7b4463001582d1ab297f39cfccea5d08540c0ca6d6672785883a
+#!RemoteAsset:  sha256:0d235f5820278d914a3155ec27af8e4258d697ea892895570807d69c0cb8cd64
 Source0:        https://download.qemu.org/%{name}-%{version}.tar.xz
 Source1:        qemu-guest-agent.service
 Source2:        qemu-ga.sysconfig
@@ -193,13 +193,8 @@ Source5:        kvm-x86.conf
 Source6:        kvm-riscv.conf
 BuildSystem:    autotools
 
-# QEMU RISC-V rvsp-ref upstream patch
-Patch1:         0001-target-riscv-cpu.c-remove-bare-condition-for-.profil.patch
-Patch2:         0002-target-riscv-Add-server-platform-reference-cpu.patch
-Patch3:         0003-hw-riscv-experimental-server-platform-reference-mach.patch
-Patch4:         0004-hw-riscv-server_platform_ref.c-add-riscv-iommu-sys.patch
-Patch5:         0005-docs-add-rvsp-ref.rst.patch
-Patch6:         0006-target-riscv-update-satp_mode-to-SV48-for-rvsp-ref.patch
+# Patch fixing ACPI table generation for KVM with PLIC emu
+Patch1:         0001-FROMLIST-hw-riscv-virt-acpi-build-Fix-RINTC-PLIC-con.patch
 
 # RISC-V KVM virt machine ACPI table fixes
 Patch7:         0007-hw-riscv-virt-acpi-build.c-Use-kvm-timer-fr.patch
@@ -1388,7 +1383,7 @@ popd
 
 %files tests
 %{testsdir}
-%{_libdir}/%{name}/accel-qtest-*.so
+%{_libdir}/%{name}/accel-qtest.so
 
 %if %{with user_dynamic}
 %files user
@@ -1764,7 +1759,6 @@ popd
 %{_mandir}/man1/qemu-system-loongarch64.1*
 %{_mandir}/man1/qemu-system-m68k.1*
 %{_mandir}/man1/qemu-system-microblaze.1*
-%{_mandir}/man1/qemu-system-microblazeel.1*
 %{_mandir}/man1/qemu-system-mips.1*
 %{_mandir}/man1/qemu-system-mips64.1*
 %{_mandir}/man1/qemu-system-mips64el.1*
@@ -1791,7 +1785,6 @@ popd
 %{_bindir}/qemu-system-avr
 %{_bindir}/qemu-system-m68k
 %{_bindir}/qemu-system-microblaze
-%{_bindir}/qemu-system-microblazeel
 %{_bindir}/qemu-system-mips
 %{_bindir}/qemu-system-mipsel
 %{_bindir}/qemu-system-or1k
@@ -1823,8 +1816,6 @@ popd
 %{_datadir}/%{name}/QEMU,tcx.bin
 %{_datadir}/%{name}/QEMU,cgthree.bin
 %{_datadir}/%{name}/kvmvapic.bin
-%{_datadir}/%{name}/linuxboot.bin
-%{_datadir}/%{name}/multiboot.bin
 %{_datadir}/%{name}/multiboot_dma.bin
 %{_datadir}/%{name}/pvh.bin
 %{_datadir}/%{name}/qboot.rom
@@ -1849,9 +1840,6 @@ popd
 %{_datadir}/systemtap/tapset/qemu-system-microblaze.stp
 %{_datadir}/systemtap/tapset/qemu-system-microblaze-log.stp
 %{_datadir}/systemtap/tapset/qemu-system-microblaze-simpletrace.stp
-%{_datadir}/systemtap/tapset/qemu-system-microblazeel.stp
-%{_datadir}/systemtap/tapset/qemu-system-microblazeel-log.stp
-%{_datadir}/systemtap/tapset/qemu-system-microblazeel-simpletrace.stp
 %{_datadir}/systemtap/tapset/qemu-system-mips.stp
 %{_datadir}/systemtap/tapset/qemu-system-mips-log.stp
 %{_datadir}/systemtap/tapset/qemu-system-mips-simpletrace.stp
