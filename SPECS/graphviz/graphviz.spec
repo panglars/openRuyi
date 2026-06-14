@@ -46,12 +46,10 @@ BuildOption(conf):  --disable-lefty
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
-BuildRequires:  automake
 BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  bison
 BuildRequires:  flex
-BuildRequires:  libtool
 BuildRequires:  pkgconfig
 BuildRequires:  pkgconfig(zlib)
 BuildRequires:  pkgconfig(libpng)
@@ -67,6 +65,7 @@ BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xt)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  python3-devel
+BuildRequires:  perl-devel
 BuildRequires:  swig >= 1.3.33
 
 %description

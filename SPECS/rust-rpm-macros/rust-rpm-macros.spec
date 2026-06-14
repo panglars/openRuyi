@@ -5,12 +5,12 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 Name:           rust-rpm-macros
-Version:        0.4
+Version:        0.4.2
 Release:        %autorelease
 Summary:        Rust macros for openRuyi packaging
 License:        MIT
 URL:            https://github.com/openRuyi-Project/rust-rpm-macros
-#!RemoteAsset:  sha256:b09e1db2b1fd8dea5567832c1090ef163bfdf5d8a1f1c6fbce0c71c01464aec2
+#!RemoteAsset:  sha256:c0a0a12308c47cd60ece6d33a5deb1fc8205bd2414312704773f6be4b7dc645f
 Source0:        https://github.com/openRuyi-Project/rust-rpm-macros/archive/refs/tags/v%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    autotools

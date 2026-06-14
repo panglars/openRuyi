@@ -1,20 +1,21 @@
 # SPDX-FileCopyrightText: (C) 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2026 openRuyi Project Contributors
 # SPDX-FileContributor: yyjeqhc <jialin.oerv@isrc.iscas.ac.cn>
+# SPDX-FileContributor: panglars <panghao.riscv@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global crate_name siphasher
-%global full_version 1.0.2
+%global full_version 1.0.3
 %global pkgname siphasher-1.0
 
 Name:           rust-siphasher-1.0
-Version:        1.0.2
+Version:        1.0.3
 Release:        %autorelease
 Summary:        Rust crate "siphasher"
 License:        MIT/Apache-2.0
 URL:            https://docs.rs/siphasher
-#!RemoteAsset:  sha256:b2aa850e253778c88a04c3d7323b043aeda9d3e30d5971937c1855769763678e
+#!RemoteAsset:  sha256:8ee5873ec9cce0195efcb7a4e9507a04cd49aec9c83d0389df45b1ef7ba2e649
 Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    rustcrates

@@ -1,8 +1,8 @@
-From 7b3b4867cb677527898f6f31e75f7cc32a22bc7d Mon Sep 17 00:00:00 2001
+From 3fa38dee57c6dfdc25c2cb94b508edb6917fcdc4 Mon Sep 17 00:00:00 2001
 From: Matt Coster <matt.coster@imgtec.com>
 Date: Fri, 6 Feb 2026 16:02:12 +0000
-Subject: [PATCH 008/189] UPSTREAM: drm/imagination: Improve handling of
- unknown FWCCB commands
+Subject: [RUYI PATCH] UPSTREAM: drm/imagination: Improve handling of unknown
+ FWCCB commands
 
 A couple small changes:
  - Validate the magic value at the head of FWCCB commands, and

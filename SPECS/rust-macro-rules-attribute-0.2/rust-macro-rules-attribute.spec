@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2026 openRuyi Project Contributors
 # SPDX-FileContributor: yyjeqhc <jialin.oerv@isrc.iscas.ac.cn>
+# SPDX-FileContributor: Kimmy <yucheng.or@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -15,14 +16,14 @@ Summary:        Rust crate "macro_rules_attribute"
 License:        Apache-2.0 OR MIT OR Zlib
 URL:            https://crates.io/crates/macro_rules_attribute
 #!RemoteAsset:  sha256:65049d7923698040cd0b1ddcced9b0eb14dd22c5f86ae59c3740eab64a676520
-Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
+Source:         https://static.crates.io/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    rustcrates
 
 BuildRequires:  rust-rpm-macros
 
 Requires:       crate(macro-rules-attribute-proc-macro-0.2/default) >= 0.2.2
-Requires:       crate(paste-1.0/default) >= 1.0.7
+Requires:       crate(paste-1.0/default) >= 1.0.15
 Provides:       crate(macro-rules-attribute) = %{version}
 Provides:       crate(%{pkgname})
 Provides:       crate(%{pkgname}/better-docs)

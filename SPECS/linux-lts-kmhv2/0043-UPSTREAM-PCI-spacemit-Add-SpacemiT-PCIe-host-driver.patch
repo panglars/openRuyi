@@ -1,8 +1,7 @@
-From aedd8aca9c697447c9ccf4ec42c2f1f526090b0a Mon Sep 17 00:00:00 2001
+From e886894eecb01fde7c6d687a520c00f8f8c6577b Mon Sep 17 00:00:00 2001
 From: Alex Elder <elder@riscstar.com>
 Date: Thu, 13 Nov 2025 15:45:37 -0600
-Subject: [PATCH 043/369] UPSTREAM: PCI: spacemit: Add SpacemiT PCIe host
- driver
+Subject: [RUYI PATCH] UPSTREAM: PCI: spacemit: Add SpacemiT PCIe host driver
 
 Introduce a driver for the PCIe host controller found in the SpacemiT K1
 SoC. The hardware is derived from the Synopsys DesignWare PCIe IP. The

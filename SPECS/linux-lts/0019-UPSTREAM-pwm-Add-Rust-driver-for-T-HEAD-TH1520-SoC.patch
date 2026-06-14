@@ -1,7 +1,7 @@
-From 63740b7f06daf76d181fffc11ae61d84289bd12a Mon Sep 17 00:00:00 2001
+From 323a18dcdb57c3c4a56d687fff097af3249b0fe3 Mon Sep 17 00:00:00 2001
 From: Michal Wilczynski <m.wilczynski@samsung.com>
 Date: Thu, 16 Oct 2025 15:38:04 +0200
-Subject: [PATCH 019/369] UPSTREAM: pwm: Add Rust driver for T-HEAD TH1520 SoC
+Subject: [RUYI PATCH] UPSTREAM: pwm: Add Rust driver for T-HEAD TH1520 SoC
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -40,7 +40,7 @@ Signed-off-by: Han Gao <gaohan@iscas.ac.cn>
  create mode 100644 drivers/pwm/pwm_th1520.rs
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 990436459862..d67c5c8d5c2e 100644
+index fce5418579bd..968ec459f065 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -22225,6 +22225,7 @@ F:	drivers/pinctrl/pinctrl-th1520.c

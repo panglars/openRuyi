@@ -49,9 +49,6 @@ jobs:
         echo "deb http://download.opensuse.org/repositories/openSUSE:/Tools/xUbuntu_24.04/ /" | sudo tee /etc/apt/sources.list.d/obs.list
         wget -qO - http://download.opensuse.org/repositories/openSUSE:/Tools/xUbuntu_24.04/Release.key | sudo apt-key add -
         sudo apt update && sudo apt install osc obs-build libwww-perl libxml-parser-perl -y
-    - name: apply pbuild patch
-      run: |
-        sudo patch --directory=/usr/lib/build --strip=1 -i $(pwd)/.github/build/pbuild.patch
     - name: Limit the number of compilations
       if: steps.changed-files.outputs.specs_any_changed == 'true'
       run: |
@@ -83,3 +80,22 @@ jobs:
        name: PR${{ github.event.pull_request.number }}-build-packages-results
        path: ${{ steps.result.outputs.paths }}
        if-no-files-found: error
+  install:
+    needs: build
+    runs-on: [ubuntu-latest]
+    container:
+      image: git.openruyi.cn/openruyi/creek-x86-64:latest
+    steps:
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v8
+      with:
+       name: PR${{ github.event.pull_request.number }}-build-packages-results
+    - name: dnf update
+      run: |
+        dnf update --assumeyes
+    - name: Install all
+      run: |
+        rpms=$(find . -name '*.rpm')
+        [ -n "$rpms" ]
+        ls -lah $rpms
+        dnf install --assumeyes $rpms

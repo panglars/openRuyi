@@ -11,25 +11,162 @@
 %bcond cephadm_pip_deps 1
 %bcond system_utf8proc 1
 %bcond system_arrow 0
+%bcond system_boost 0
 %bcond lttng 1
 %bcond libradosstriper 1
 %bcond cephfs_shell 1
+%bcond amqp_endpoint 1
+%bcond kafka_endpoint 1
+%bcond tcmalloc 1
+%bcond lua_packages 1
+%bcond jaeger 1
+%bcond manpages 1
+%bcond ocf 1
+%bcond spdk 0
+%bcond crimson 0
+%bcond seastar_dpdk 0
 
 %define _lto_cflags %{nil}
 
+%if %{with crimson}
+# Seastar uses longjmp() to implement coroutine switching; that trips
+# __longjmp_chk when _FORTIFY_SOURCE>=1. Upstream ceph.spec.in strips
+# the -Wp,-D_FORTIFY_SOURCE=2 flag from CFLAGS/CXXFLAGS in %build for
+# the same reason. Disabling the macro globally is the BuildSystem-
+# friendly equivalent.
+%global _fortify_level 0
+%endif
+
+# Submodule SHAs pinned by ceph.git@v21.0.0 (.gitmodules + tree).
+%global sub_ceph_object_corpus          44b11dd5aa8a2f965ea395f13cf4cbb4a61e9afe
+%global sub_ceph_erasure_code_corpus    2d7d78b9cc52e8a9529d8cc2d2954c7d375d5dd7
+%global sub_blake3                      92e4cd71be48fdf9a79e88ef37b8f415ec5ac210
+%global sub_arrow                       6a2e19a852b367c72d7b12da4d104456491ed8b7
+%global sub_blkin                       f24ceec055ea236a093988237a9821d145f5f7c8
+%global sub_c_ares                      fd6124c74da0801f23f9d324559d8b66fb83f533
+%global sub_isa_l_crypto                a6dc869666fca3eef9a0305b290e4e0fc8bac645
+%global sub_gf_complete                 7e61b44404f0ed410c83cfd3947a52e88ae044e1
+%global sub_jerasure                    96c76b89d661c163f65a014b8042c9354ccf7f31
+%global sub_fmt                         123913715afeb8a437e6388b4473fcc4753e1c9a
+%global sub_googletest                  6910c9d9165801d8827d628cb72eb7ea9dd538c5
+%global sub_isa_l                       bee5180a1517f8b5e70b02fcd66790c623536c5d
+%global sub_opentelemetry_cpp           95fe422d56d74ded3640c5cdcaa3011bc9e18f68
+%global sub_libkmip                     c05329f82a1a0e6d9bc4bae6fb25ce3d8e733f6c
+%global sub_rook_client_python          82673cd7c7a3f4919b98706985ff27e57d2c1b94
+%global sub_rocksdb                     24ea35870fe9b3ba15285ec8746ba97ed5d67ff3
+%global sub_s3select                    0a0f6d439441f5b121ed1052dac54542e4f1d89b
+# Nested submodules under src/s3select (ceph/s3select itself uses recursive
+# submodules). Both are referenced unconditionally by the s3select include
+# chain pulled in from src/rgw/rgw_s3select_private.h:
+#   include/s3select_csv_parser.h -> #include "csvparser/csv.h"
+#   src/CMakeLists.txt:417-421    -> s3select/rapidjson/include
+%global sub_s3select_csvparser          5a417973b4cea674a5e4a3b88a23098a2ab75479
+%global sub_s3select_rapidjson          fcb23c2dbf561ec0798529be4f66394d3e4996d8
+%global sub_seastar                     15b1ca1bec7e148df262343f57b160d0248c736b
+%global sub_utf8proc                    d7bf128df773c2a1a7242eb80e51e91a769fc985
+%global sub_xxhash                      bbb27a5efb85b92a0486cf361a8635715a53f6ba
+# Boost is not a submodule; make-dist downloads 1.87.0 and concatenates the
+# tarball into the official release.
+%global boost_version       1.87.0
+%global boost_underscore    1_87_0
+
 Name:           ceph
-Version:        20.2.0
+Version:        21.0.0
 Release:        %autorelease
 Summary:        User space components of the Ceph file system
 License:        LGPL-2.1-or-later AND LGPL-3.0-only AND CC-BY-SA-3.0 AND GPL-2.0-only AND BSL-1.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT
 URL:            http://ceph.com/
 VCS:            git:https://github.com/ceph/ceph
-#!RemoteAsset:  sha256:8de064d69831ef327339539f233c78ec827fa351c40ced9a9916f0b4174c6685
-Source:         https://download.ceph.com/tarballs/ceph-%{version}.tar.gz
+# GitHub archive tarball contains empty submodule placeholder dirs only.
+# download.ceph.com release tarball (which bundles all submodules + boost)
+# does not have v21.0.0 yet, so we reassemble from per-submodule archives below.
+#!RemoteAsset:  sha256:321f745b69bce0a4a9f78fe708d8c6a523ea249c07dde5f11cfa6f515565caca
+Source0:        https://github.com/ceph/ceph/archive/refs/tags/v%{version}.tar.gz#/ceph-%{version}.tar.gz
+# Bundled isa-l v2.29 has no riscv64 support; v2.32.0 onwards ships
+# riscv64 RVV sources. Used only on riscv64 to replace src/isa-l after
+# the Source20 (submodule) extraction.
+#!RemoteAsset:  sha256:7a194ff80d0f7e20615c497654e8a51b0184d0c79e2e265c7f555f52a26a05a4
+Source1:        https://github.com/intel/isa-l/archive/refs/tags/v2.32.0.tar.gz#/isa-l-2.32.0.tar.gz
+# https://github.com/intel/isa-l/pull/412
+Source2:        isa-l-riscv64-rvv-raid-aliasing.patch
+%if %{without system_boost}
+#!RemoteAsset:  sha256:af57be25cb4c4f4b413ed692fe378affb4352ea50fbe294a11ef548f4d527d89
+Source3:        https://archives.boost.io/release/%{boost_version}/source/boost_%{boost_underscore}.tar.bz2
+%endif
+
+# Submodule archives.
+#!RemoteAsset:  sha256:f176d956c6eb862c3b10563e476f5ef9b7c3ad2b057ebe5c139ed6c31b84d236
+Source10:       https://github.com/ceph/ceph-object-corpus/archive/%{sub_ceph_object_corpus}.tar.gz#/ceph-object-corpus-%{sub_ceph_object_corpus}.tar.gz
+#!RemoteAsset:  sha256:842ac0500fcfd4e76045474abbe9079f8d54e7837cb2399d134929a0af281497
+Source11:       https://github.com/ceph/ceph-erasure-code-corpus/archive/%{sub_ceph_erasure_code_corpus}.tar.gz#/ceph-erasure-code-corpus-%{sub_ceph_erasure_code_corpus}.tar.gz
+#!RemoteAsset:  sha256:88930a1b7f3f910eda85219d29197611ee8ef468b9617285233af885eab86533
+Source12:       https://github.com/BLAKE3-team/BLAKE3/archive/%{sub_blake3}.tar.gz#/BLAKE3-%{sub_blake3}.tar.gz
+#!RemoteAsset:  sha256:03fe1b971609bdec287c77a5c9c89928a32be19875cb1458c711c1b80e33a7b4
+Source13:       https://github.com/apache/arrow/archive/%{sub_arrow}.tar.gz#/arrow-%{sub_arrow}.tar.gz
+#!RemoteAsset:  sha256:0bc468fddd8d77c354ab9e04899d7333b8c0543616f37bec383634c8ed7e87cc
+Source14:       https://github.com/ceph/blkin/archive/%{sub_blkin}.tar.gz#/blkin-%{sub_blkin}.tar.gz
+#!RemoteAsset:  sha256:8b76222d7bf9b35a1ed8194c65ac60b55a1b1ef0c2fb2a735e18bf1f387133b7
+Source15:       https://github.com/ceph/c-ares/archive/%{sub_c_ares}.tar.gz#/c-ares-%{sub_c_ares}.tar.gz
+#!RemoteAsset:  sha256:ebe7899b2494eb3f6cd3c7555cd970c2c9611e7ae5471f3fd41afd080bdf78fa
+Source16:       https://github.com/intel/isa-l_crypto/archive/%{sub_isa_l_crypto}.tar.gz#/isa-l_crypto-%{sub_isa_l_crypto}.tar.gz
+#!RemoteAsset:  sha256:8ff04510527262fbc741d9d84b1c9c6066e1dd909b3d5d37dc33dde27b0bc749
+Source17:       https://github.com/ceph/gf-complete/archive/%{sub_gf_complete}.tar.gz#/gf-complete-%{sub_gf_complete}.tar.gz
+#!RemoteAsset:  sha256:d6c24102341e7ec40cc63925e3a8b53a39bff088c8c04f166991f69bd954457c
+Source18:       https://github.com/ceph/jerasure/archive/%{sub_jerasure}.tar.gz#/jerasure-%{sub_jerasure}.tar.gz
+#!RemoteAsset:  sha256:95f89f1eb3b53478417185afc0b7e3d40ec889687af86e890da20068534d29f7
+Source19:       https://github.com/ceph/fmt/archive/%{sub_fmt}.tar.gz#/fmt-%{sub_fmt}.tar.gz
+#!RemoteAsset:  sha256:bde221be7f3841fcbc3971665d77d717116394a42155d988ee6407dfc39f1f09
+Source20:       https://github.com/ceph/googletest/archive/%{sub_googletest}.tar.gz#/googletest-%{sub_googletest}.tar.gz
+#!RemoteAsset:  sha256:569dd67a430d33400a147177b4e8d970a353d5528bfafd57da08f1bcffa50c25
+Source21:       https://github.com/ceph/isa-l/archive/%{sub_isa_l}.tar.gz#/isa-l-bundled-%{sub_isa_l}.tar.gz
+#!RemoteAsset:  sha256:4b20033029eb4e732f44428905ed71d024a3062e6936ce8112fc1bac8ef287e6
+Source22:       https://github.com/ceph/opentelemetry-cpp/archive/%{sub_opentelemetry_cpp}.tar.gz#/opentelemetry-cpp-%{sub_opentelemetry_cpp}.tar.gz
+#!RemoteAsset:  sha256:c272bf8545a8fe9c00af27f5d60e3f5b2955cae930738ab94b016f665bcb207a
+Source23:       https://github.com/ceph/libkmip/archive/%{sub_libkmip}.tar.gz#/libkmip-%{sub_libkmip}.tar.gz
+#!RemoteAsset:  sha256:bb6997295a967ac71e2e84a2d629d7828bdb056ffa427a57f925cf027b1a1974
+Source24:       https://github.com/ceph/rook-client-python/archive/%{sub_rook_client_python}.tar.gz#/rook-client-python-%{sub_rook_client_python}.tar.gz
+#!RemoteAsset:  sha256:323c630aaf76a02ff0ed4bcc5b34e100d34d286ce0ac21b90a267c165e1b4667
+Source25:       https://github.com/ceph/rocksdb/archive/%{sub_rocksdb}.tar.gz#/rocksdb-%{sub_rocksdb}.tar.gz
+#!RemoteAsset:  sha256:799b442ff8f7b03111fdd8bd43b07cb9a497fa384332b1acdd6c9a2bfd21206c
+Source26:       https://github.com/ceph/s3select/archive/%{sub_s3select}.tar.gz#/s3select-%{sub_s3select}.tar.gz
+#!RemoteAsset:  sha256:ab14ab9c9d8d715779b15a8c17a8c88aebd293b6be03ddfef97e4559a67acc53
+Source27:       https://github.com/ceph/seastar/archive/%{sub_seastar}.tar.gz#/seastar-%{sub_seastar}.tar.gz
+#!RemoteAsset:  sha256:9131e0a9c6fc25b0fe5d164a4e3eef1218bf22db33bd6b10bc43dc252d769afe
+Source29:       https://github.com/JuliaStrings/utf8proc/archive/%{sub_utf8proc}.tar.gz#/utf8proc-%{sub_utf8proc}.tar.gz
+#!RemoteAsset:  sha256:716fbe4fc85ecd36488afbbc635b59b5ab6aba5ed3b69d4a32a46eae5a453d38
+Source30:       https://github.com/ceph/xxHash/archive/%{sub_xxhash}.tar.gz#/xxHash-%{sub_xxhash}.tar.gz
+# Nested submodules of ceph/s3select (the s3select tarball itself ships empty
+# submodule placeholders for these two; both are unconditionally pulled in by
+# the s3select include chain used by src/rgw).
+#!RemoteAsset:  sha256:daa7698f7c97a2ec7f4b78ee8466146668315506611d9d98c41e032a7aa9eb1b
+Source32:       https://github.com/ben-strasser/fast-cpp-csv-parser/archive/%{sub_s3select_csvparser}.tar.gz#/fast-cpp-csv-parser-%{sub_s3select_csvparser}.tar.gz
+#!RemoteAsset:  sha256:ced53d8e21e06b50a75e88b6bf8e2ef8ac1a21e2f30121a57b406648d247df4c
+Source33:       https://github.com/Tencent/rapidjson/archive/%{sub_s3select_rapidjson}.tar.gz#/rapidjson-%{sub_s3select_rapidjson}.tar.gz
+# Skipped submodules (not required by the current build options):
+#   src/breakpad        (WITH_BREAKPAD=OFF below)
+#   src/lss             (transitive dep of breakpad)
+#   src/qatlib          (WITH_QATLIB=OFF)
+#   src/qatzip          (WITH_QATZIP=OFF)
+#   src/nvmeof/gateway  (only needed for nvmeof gateway client builds)
+# Also skipped: nested submodules of the populated tarballs above. Their
+# parent's build does not reference them under the current bcond set, but if
+# the matching option is ever turned on the corresponding nested archive(s)
+# must be added (mirroring src/s3select above):
+#   src/spdk/{dpdk,intel-ipsec-mb,isa-l,ocf}                (needs WITH_SPDK)
+#   src/seastar/dpdk                                        (needs WITH_CRIMSON + Seastar_DPDK)
+#   src/arrow/{cpp/submodules/parquet-testing,testing}      (needs WITH_RADOSGW_SELECT_PARQUET)
+#   src/jaegertracing/opentelemetry-cpp/third_party/nlohmann-json
+#                                                           (needs OTLP/ZIPKIN/ELASTICSEARCH/ZPAGES/ETW exporter)
 BuildSystem:    cmake
 
+# ceph requires STATIC internal libs
+BuildOption(conf):  -DBUILD_SHARED_LIBS:BOOL=OFF
 BuildOption(conf):  -DWITH_SYSTEM_ZSTD:BOOL=ON
-BuildOption(conf):  -DWITH_JAEGER=OFF
+%if %{with jaeger}
+BuildOption(conf):  -DWITH_JAEGER:BOOL=ON
+%else
+BuildOption(conf):  -DWITH_JAEGER:BOOL=OFF
+%endif
 BuildOption(conf):  -DWITH_RADOSGW_SELECT_PARQUET=OFF
 BuildOption(conf):  -DWITH_RADOSGW_ARROW_FLIGHT=OFF
 %if %{with rdma}
@@ -37,13 +174,23 @@ BuildOption(conf):  -DWITH_RDMA=ON
 %else
 BuildOption(conf):  -DWITH_RDMA=OFF
 %endif
+%if %{with spdk}
+BuildOption(conf):  -DWITH_SPDK:BOOL=ON
+BuildOption(conf):  -DWITH_SYSTEM_SPDK:BOOL=ON
+%endif
 BuildOption(conf):  -GNinja
 BuildOption(conf):  -DBUILD_CONFIG=rpmbuild
 BuildOption(conf):  -DSYSTEMD_SYSTEM_UNIT_DIR:PATH=%{_unitdir}
 BuildOption(conf):  -DCMAKE_INSTALL_SYSCONFDIR:PATH=%{_sysconfdir}
+%if %{with manpages}
+BuildOption(conf):  -DWITH_MANPAGE:BOOL=ON
+%else
 BuildOption(conf):  -DWITH_MANPAGE:BOOL=OFF
+%endif
 BuildOption(conf):  -DWITH_PYTHON3:STRING=3
 BuildOption(conf):  -DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF
+# v21 wires Catch2 via CPM/FetchContent; WITH_SYSTEM_CATCH2=ON makes CPM resolve via find_package() against the system Catch2-devel.
+BuildOption(conf):  -DWITH_SYSTEM_CATCH2:BOOL=ON
 %if %{without ceph_test_package}
 BuildOption(conf):  -DWITH_TESTS:BOOL=OFF
 %endif
@@ -58,7 +205,11 @@ BuildOption(conf):  -DWITH_BABELTRACE:BOOL=OFF
 BuildOption(conf):  -DWITH_OCF:BOOL=ON
 %endif
 BuildOption(conf):  -DWITH_SYSTEM_LIBURING:BOOL=ON
+%if %{with system_boost}
+BuildOption(conf):  -DWITH_SYSTEM_BOOST:BOOL=ON
+%else
 BuildOption(conf):  -DWITH_SYSTEM_BOOST:BOOL=OFF
+%endif
 %if %{with libradosstriper}
 BuildOption(conf):  -DWITH_LIBRADOSSTRIPER:BOOL=ON
 %else
@@ -77,13 +228,21 @@ BuildOption(conf):  -DWITH_RADOSGW_KAFKA_ENDPOINT:BOOL=ON
 %else
 BuildOption(conf):  -DWITH_RADOSGW_KAFKA_ENDPOINT:BOOL=OFF
 %endif
+%if %{with tcmalloc}
+BuildOption(conf):  -DALLOCATOR:STRING=tcmalloc
+%else
+BuildOption(conf):  -DALLOCATOR:STRING=libc
+%endif
 %if %{without lua_packages}
 BuildOption(conf):  -DWITH_RADOSGW_LUA_PACKAGES:BOOL=OFF
 %endif
 %if %{with rbd_ssd_cache}
 BuildOption(conf):  -DWITH_RBD_SSD_CACHE:BOOL=ON
 %endif
+# BOOST_J only drives the bundled-Boost b2 build; irrelevant with system Boost.
+%if %{without system_boost}
 BuildOption(conf):  -DBOOST_J:STRING=%{_smp_build_ncpus}
+%endif
 BuildOption(conf):  -Dxsimd_SOURCE="SYSTEM"
 BuildOption(conf):  -DWITH_SYSTEM_UTF8PROC:BOOL=ON
 BuildOption(conf):  -DWITH_QATDRV:BOOL=OFF
@@ -91,10 +250,32 @@ BuildOption(conf):  -DWITH_QATLIB:BOOL=OFF
 BuildOption(conf):  -DWITH_QATZIP:BOOL=OFF
 BuildOption(conf):  -DWITH_GRAFANA:BOOL=ON
 BuildOption(conf):  -DCEPHADM_BUNDLED_DEPENDENCIES=none
+# src/breakpad submodule intentionally not shipped; disable to avoid touching it.
+BuildOption(conf):  -DWITH_BREAKPAD:BOOL=OFF
+%if %{with crimson}
+BuildOption(conf):  -DWITH_CRIMSON:BOOL=ON
+%if %{with seastar_dpdk}
+# Seastar DPDK network backend (src/seastar/dpdk).
+BuildOption(conf):  -DSeastar_DPDK:BOOL=ON
+%ifarch riscv64
+BuildOption(conf):  -DSeastar_DPDK_MACHINE=rv64gcv
+%endif
+%endif
+# Crimson and Jaeger tracing don't coexist (upstream ceph.spec.in forces
+# WITH_JAEGER=OFF whenever WITH_CRIMSON=ON); override any prior ON above.
+BuildOption(conf):  -DWITH_JAEGER:BOOL=OFF
+%else
+BuildOption(conf):  -DWITH_CRIMSON:BOOL=OFF
+%endif
 
 BuildRequires:  pkgconfig(libzstd)
 BuildRequires:  gperf
 BuildRequires:  cmake
+%if %{with ceph_test_package}
+# v21 wires Catch2 as a CPM/FetchContent dep for test binaries; system
+# Catch2-devel is resolved via -DWITH_SYSTEM_CATCH2:BOOL=ON above.
+BuildRequires:  cmake(Catch2)
+%endif
 BuildRequires:  pkgconfig(fuse3)
 BuildRequires:  pkgconfig(grpc)
 BuildRequires:  pkgconfig(libaio)
@@ -120,9 +301,10 @@ BuildRequires:  perl
 BuildRequires:  pkgconfig
 BuildRequires:  procps
 BuildRequires:  python3
-BuildRequires:  pkgconfig(python)
-BuildRequires:  python-setuptools
-BuildRequires:  python-Cython
+BuildRequires:  pkgconfig(python3)
+BuildRequires:  python3dist(pip)
+BuildRequires:  python3dist(setuptools)
+BuildRequires:  python3dist(cython)
 BuildRequires:  snappy-devel
 BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  sudo
@@ -133,10 +315,41 @@ BuildRequires:  nasm
 BuildRequires:  pkgconfig(lua)
 BuildRequires:  pkgconfig(lmdb)
 %if %{with amqp_endpoint}
-BuildRequires:  librabbitmq-devel
+BuildRequires:  pkgconfig(librabbitmq)
 %endif
 %if %{with kafka_endpoint}
 BuildRequires:  pkgconfig(rdkafka)
+%endif
+%if %{with tcmalloc}
+BuildRequires:  pkgconfig(libtcmalloc) >= 2.6.2
+%endif
+%if %{with jaeger}
+BuildRequires:  bison
+BuildRequires:  flex
+BuildRequires:  pkgconfig(libevent)
+BuildRequires:  pkgconfig(nlohmann_json)
+BuildRequires:  pkgconfig(thrift)
+%endif
+%if %{with crimson}
+# Bundled Seastar build-time deps (src/seastar). Ceph's WITH_CRIMSON wires
+# in src/seastar; these are Seastar's own configure-time requirements,
+# matched against upstream ceph.spec.in's "with crimson" block.
+BuildRequires:  pkgconfig(libcares)
+BuildRequires:  pkgconfig(hwloc)
+BuildRequires:  pkgconfig(gnutls)
+BuildRequires:  pkgconfig(libsctp)
+BuildRequires:  pkgconfig(pciaccess)
+BuildRequires:  pkgconfig(protobuf)
+BuildRequires:  pkgconfig(valgrind)
+BuildRequires:  pkgconfig(yaml-cpp)
+BuildRequires:  systemtap-sdt-devel
+BuildRequires:  ragel
+%if %{with seastar_dpdk}
+BuildRequires:  pkgconfig(libdpdk)
+%endif
+%endif
+%if %{with manpages}
+BuildRequires:  python3dist(sphinx)
 %endif
 BuildRequires:  pkgconfig(re2)
 BuildRequires:  pkgconfig(libutf8proc)
@@ -146,6 +359,13 @@ BuildRequires:  pkgconfig(libkeyutils)
 BuildRequires:  pkgconfig(libibverbs)
 BuildRequires:  pkgconfig(librdmacm)
 %endif
+%if %{with spdk}
+# libdpdk: spdk_env_dpdk.pc Requires it. libisal: spdk's .so leave ISA-L symbols
+# undefined for the final link and don't Require isa-l
+BuildRequires:  pkgconfig(spdk_nvme)
+BuildRequires:  pkgconfig(libdpdk)
+BuildRequires:  pkgconfig(libisal)
+%endif
 %if %{with lttng}
 BuildRequires:  pkgconfig(lttng-ust)
 BuildRequires:  pkgconfig(babeltrace)
@@ -154,11 +374,34 @@ BuildRequires:  ninja
 BuildRequires:  pkgconfig(ldap)
 BuildRequires:  pkgconfig(numa)
 BuildRequires:  pkgconfig(openssl)
-BuildRequires:  python-prettytable
-BuildRequires:  python-pyyaml
+BuildRequires:  python3dist(prettytable)
+BuildRequires:  python3dist(pyyaml)
 BuildRequires:  pkgconfig(liblz4)
 BuildRequires:  pkgconfig(expat)
+%if %{with system_boost}
+# ceph 21 hard-requires Boost 1.87 (CMakeLists.txt: find_package(Boost 1.87 REQUIRED)).
+BuildRequires:  boost-devel
+%endif
 BuildRequires:  python-rpm-macros
+%if %{with make_check}
+# run-tox-mgr venv builds scipy from sdist (no riscv64 wheel): gcc-fortran + OpenBLAS.
+BuildRequires:  gcc-fortran
+# jsonnet-bundler-build.sh: go build at test time.
+BuildRequires:  git
+BuildRequires:  go
+# unittest_hostname / unittest_config exec("hostname")
+BuildRequires:  hostname
+# src/test/cli/crushtool/choose-args.t pipes crushtool --dump into jq.
+BuildRequires:  jq
+# monitoring/ceph-mixin/lint-jsonnet.sh invokes jsonnet directly.
+BuildRequires:  jsonnet
+# scipy sdist; see gcc-fortran comment above.
+BuildRequires:  pkgconfig(openblas)
+# run-tox-alerts-{lint,check} invoke promtool.
+BuildRequires:  promtool
+# cryptography sdist; see gcc-fortran comment above.
+BuildRequires:  rust
+%endif
 
 Requires:       ceph-osd%{?_isa} = %{version}-%{release}
 Requires:       ceph-mds%{?_isa} = %{version}-%{release}
@@ -167,52 +410,63 @@ Requires:       ceph-mon%{?_isa} = %{version}-%{release}
 Requires:       systemd
 Requires(post): binutils
 %if %{with lua_packages}
-Requires:       %{luarocks_package_name}
+Requires:       luarocks
 %endif
 
 %patchlist
-# Fix CRC32C Intel fast assembly: update copyright and add prefetch optimization
-0001-src-common-crc32c_intel_fast.patch
-# Add missing <ostream> include in bit_str.h for std::ostream support
-0002-src-common-bitstr.h.patch
-# Add CET (Control-flow Enforcement Technology) marker to crc32c_intel_fast_zero_asm.s for IBT/SHSTK compatibility
-0003-CET-Add-CET-marker-to-crc32c_intel_fast_zero_asm.s.patch
-# Add CET marker to isa-l x86-64 CRC32 assembly codes for IBT/SHSTK compatibility
-0004-isa-l-CET-Add-CET-marker-to-x86-64-crc32-assembly-co.patch
-# Add CET marker to spdk/isa-l x86-64 CRC32 assembly codes for IBT/SHSTK compatibility
-0005-spdk-isa-l-CET-Add-CET-marker-to-x86-64-crc32-assemb.patch
-# Fix tracing on x86_64: define STAP_SDT_ARG_CONSTRAINT to workaround SystemTap constraint issue
-0006-src-tracing.patch
-# Fix dbstore CMakeLists: make dbstore_lib a STATIC library and add global link dependency
-0007-src-rgw-store-dbstore-CMakeLists.txt.patch
-# GCC 13 compatibility: fix std::uint8_t/uint32_t qualified name issues in templates
-0008-gcc-13.patch
-# Add -fcf-protection compiler flag for x86_64 in Boost build configuration
-0009-cmake-modules-BuildBoost.cmake.patch
-# Add CET .note.gnu.property section to Boost context x86_64 assembly for IBT/SHSTK compatibility
-0010-boost-asm.patch
-# Cython 3 compatibility: add noexcept specifier to callback functions in rbd.pyx
-0011-src-pybind-rbd-rbd.pyx.patch
-# Python 3.13 compatibility: add extern declaration for removed PySys_SetPath API
-0012-src-mgr-PyModule.cc.patch
-# Fix PPC CRC32C assembly: use __ASSEMBLY__ define instead of CRC32_CONSTANTS_HEADER
-0013_src_common_crc32c_ppc_asm.S.patch
-# OpenSSL 3.x compatibility: conditionally include deprecated engine.h header
-0014-openssl-no-engine.patch
-# Add missing <cstdint> include in RocksDB headers for uint64_t type
-0015-src-rocksdb-db-blob-blob_file_meta.h.patch
-# Disable shared library build and version properties in googletest to fix linking issues
-0016-src-googletest-nosharedlibs.patch
-# Fix tracing CMakeLists: set C99 extension compile option to gnu23 for compatibility
-0017-src-tracing.patch
-# Add missing GTEST_DISALLOW_COPY/MOVE_AND_ASSIGN_ macros for newer googletest compatibility
-0018-src-test-neorados-common_tests.h.patch
-# Apache Arrow 20.0.0 compatibility: add encryption_internal_19.h and update s3select API
-0019-libarrow-20.0.0.patch
-# Fix libcephfs linking: add missing common library dependency
-0020-src-CMakeLists.txt.patch
-# C++20/23 compatibility: replace deprecated <ciso646> with <iso646.h> in opentelemetry
-0021-iso646.patch
+# https://github.com/ceph/ceph/commit/3ccfff1acd6fa5babc7de035271b7f91fccabb8c
+1001-arch-riscv-fix-hwprobe.patch
+# https://github.com/ceph/ceph/commit/c82cd26ac4c64f7b307d5630a5bfb2204a8dc3b8
+1002-test-crimson-fix-test-remap-pin-concurrent.patch
+# https://github.com/ceph/ceph/commit/980177003c23fda412e07afa84524b5e990f9b8c
+1003-test-crimson-object-data-handler-init-known-contents.patch
+# https://github.com/ceph/ceph/pull/69156
+1004-monitoring-ceph-mixin-jsonnet-bundler-version.patch
+# https://github.com/ceph/ceph/pull/69157
+1005-test-mds-quiesce-agent-evaluate-await-idle.patch
+# https://github.com/ceph/ceph/commit/fbcd8a4a37e02a67a29928160cfe79be116a94aa
+1006-isa-l-enable-on-riscv.patch
+# https://github.com/ceph/ceph/pull/69161
+1007-librbd-pwl-cancel-timer-before-perf-stop.patch
+# https://github.com/ceph/ceph/pull/69162
+1008-cephadm-tests-mock-find-program-lvcreate.patch
+# https://github.com/ceph/ceph/commit/82ff35794af071654368347426879519f3aff266
+1009-crimson-seastore-record-submitter-wait-available-idempotent.patch
+# https://github.com/ceph/ceph/pull/69165
+1010-cmake-AddCephTest-use-catch2-imported-target.patch
+# https://github.com/ceph/ceph/commit/868fdd8120790ef453692604fff910e29c56cee1
+1011-rgw-rest-swift-error-handler-out-of-line.patch
+# https://github.com/scylladb/seastar/commit/59225b1c6d2225b67dd2f2cebd3aa22be84b55d3
+1012-src-seastar-add-initial-riscv-port.patch
+# https://github.com/scylladb/seastar/pull/3435
+1013-seastar-io-uring-retry-socket-send-on-eagain.patch
+# https://github.com/ceph/ceph/commit/d18ffa868fde6af02548404d95c7c0fe8947ddc6
+1014-blk-spdk-support-both-old-and-new-spdk_env_opts-memb.patch
+# https://github.com/ceph/ceph/commit/6af1a859468c2cf9697e23fb428b24f49fe74e74
+1015-cmake-add-WITH_SYSTEM_SPDK-to-link-a-system-installe.patch
+# https://github.com/scylladb/seastar/pull/3436
+1016-cmake-don-t-require-i40e-sfc-DPDK-PMDs-on-RISC-V.patch
+# https://github.com/scylladb/seastar/pull/3437
+1017-build-also-detect-GCC-s-Wno-error-cpp-for-warning.patch
+# https://github.com/ceph/ceph/pull/69187
+1018-cmake-rename-Finddpdk-module-to-FindDPDK.patch
+# https://github.com/ceph/ceph/pull/69188
+1019-compressor-zstd-include-zstd.h-instead-of-the-bundle.patch
+# https://github.com/ceph/ceph/pull/69215
+1020-build-link-legacy-option-headers-from-targets-racing.patch
+# https://github.com/scylladb/seastar/pull/3441
+1021-cmake-guard-DPDK-dpdk-against-redefinition-in-Finddp.patch
+
+# Bump pylint 2.6.0 -> 2.17.7 for Python 3.13 / wrapt compat.
+2001-monitoring-ceph-mixin-bump-pylint.patch
+# Bump cephadm pyfakefs pin to >=5.7,<6 for Python 3.13.
+2002-cephadm-tox-pyfakefs-py313.patch
+# mgr tox: drop flake8 git ls-files refcount checks (no .git in tarball).
+2003-mgr-tox-skip-git-ls-files.patch
+# unittest-seastar-messenger-thrash --memory 256M -> 1G (too tight on riscv64).
+2004-test-crimson-messenger-thrash-bump-memory.patch
+# cephadm tox: drop flake8 git ls-files registry assertions (no .git in tarball).
+2007-cephadm-tox-drop-git-lsfiles-checks.patch
 
 %description
 Ceph is a massively scalable, open-source, distributed storage system that runs
@@ -390,11 +644,28 @@ under Open Cluster Framework (OCF) compliant resource
 managers such as Pacemaker.
 %endif
 
+%if %{with crimson}
+%package        crimson-osd
+Summary:        Ceph Object Storage Daemon, Crimson implementation
+Requires:       ceph-osd%{?_isa} = %{version}-%{release}
+Requires:       binutils
+
+%description    crimson-osd
+crimson-osd is the next-generation Ceph object storage daemon, built on
+the Seastar shared-nothing framework for low-latency NVMe back ends. It
+shares on-disk format and tooling with the classic ceph-osd but runs
+each shard pinned to a single core with user-space polled I/O.
+%endif
+
 %package        osd
 Summary:        Ceph Object Storage Daemon
 Requires:       ceph-base%{?_isa} = %{version}-%{release}
 Requires:       sudo
 Requires:       libstoragemgmt
+%if %{with crimson}
+# crimson links against the system protobuf shared library at runtime.
+Requires:       protobuf
+%endif
 # volume deps (merged from ceph-volume)
 Requires:       cryptsetup
 Requires:       e2fsprogs
@@ -499,7 +770,67 @@ Summary:        Ceph monitoring dashboards, alerts and SNMP MIB
 This package provides Grafana dashboards, Prometheus alerts, and
 SNMP MIB for monitoring Ceph clusters.
 
-%prep -a
+%prep
+# Fully override the BuildSystem-injected prep stage: numbered patches must be
+# applied AFTER the submodule tarballs are extracted, because
+# 1012-src-seastar-add-initial-riscv-port touches files under src/seastar/ -
+# which is an empty placeholder dir until SOURCE27 is extracted below.
+%autosetup -p1 -N
+# GitHub archive tarball ships empty submodule placeholder dirs.
+# Populate each from its pinned-SHA archive Source.
+tar -xf %{SOURCE10} -C ceph-object-corpus            --strip-components=1
+tar -xf %{SOURCE11} -C ceph-erasure-code-corpus      --strip-components=1
+tar -xf %{SOURCE12} -C src/BLAKE3                    --strip-components=1
+tar -xf %{SOURCE13} -C src/arrow                     --strip-components=1
+tar -xf %{SOURCE14} -C src/blkin                     --strip-components=1
+tar -xf %{SOURCE15} -C src/c-ares                    --strip-components=1
+tar -xf %{SOURCE16} -C src/crypto/isa-l/isa-l_crypto --strip-components=1
+tar -xf %{SOURCE17} -C src/erasure-code/jerasure/gf-complete --strip-components=1
+tar -xf %{SOURCE18} -C src/erasure-code/jerasure/jerasure   --strip-components=1
+tar -xf %{SOURCE19} -C src/fmt                       --strip-components=1
+tar -xf %{SOURCE20} -C src/googletest                --strip-components=1
+tar -xf %{SOURCE21} -C src/isa-l                     --strip-components=1
+tar -xf %{SOURCE22} -C src/jaegertracing/opentelemetry-cpp --strip-components=1
+tar -xf %{SOURCE23} -C src/libkmip                   --strip-components=1
+tar -xf %{SOURCE24} -C src/pybind/mgr/rook/rook-client-python --strip-components=1
+tar -xf %{SOURCE25} -C src/rocksdb                   --strip-components=1
+tar -xf %{SOURCE26} -C src/s3select                  --strip-components=1
+tar -xf %{SOURCE27} -C src/seastar                   --strip-components=1
+tar -xf %{SOURCE29} -C src/utf8proc                  --strip-components=1
+tar -xf %{SOURCE30} -C src/xxHash                    --strip-components=1
+# Nested submodules under src/s3select. The s3select tarball ships its
+# include/csvparser and rapidjson dirs as empty submodule placeholders;
+# populate them after Source26 extraction above.
+tar -xf %{SOURCE32} -C src/s3select/include/csvparser --strip-components=1
+tar -xf %{SOURCE33} -C src/s3select/rapidjson         --strip-components=1
+
+# Boost (cmake BuildBoost.cmake expects src/boost/boost/version.hpp).
+%if %{without system_boost}
+tar -xf %{SOURCE3} -C src
+mv src/boost_%{boost_underscore} src/boost
+%endif
+
+# Replace bundled isa-l (v2.x submodule head) with v2.32.0 only on riscv64:
+# v2.32+ ships the riscv64 RVV sources we need. Done AFTER the submodule
+# population above so we are overwriting a known state.
+%ifarch riscv64
+rm -rf src/isa-l
+tar -xf %{SOURCE1} -C src
+mv src/isa-l-2.32.0 src/isa-l
+
+patch -p1 -i %{SOURCE2}
+%endif
+
+# Apply numbered patches now that all submodule placeholders (src/seastar,
+# src/isa-l, etc.) are populated; see the autosetup -N call above.
+%autopatch -p1
+
+# src/CMakeLists.txt reads src/.git_version when .git/ is absent (true for
+# GitHub archive tarballs; the file is only generated by upstream make-dist).
+# Provide a placeholder so %conf can proceed; the values only feed the
+# embedded version string.
+printf '%s\n%s\n' 0000000000000000000000000000000000000000 v%{version} > src/.git_version
+
 # Create two sysusers.d config files
 cat >ceph.sysusers.conf <<EOF
 g ceph 167
@@ -510,7 +841,12 @@ u cephadm - 'cephadm user for mgr/cephadm' %{_sharedstatedir}/cephadm /bin/bash
 EOF
 
 %check
-# no test
+%if %{with make_check}
+# unittest_* targets are EXCLUDE_FROM_ALL; build the `tests` aggregate before ctest.
+%cmake_build --target tests
+# Stale golden PromQL values pinned to an older prometheus
+%ctest -E '^(run-tox-promql-query-test|run-promtool-unittests)$'
+%endif
 
 %install -a
 # we have dropped sysvinit bits
@@ -629,6 +965,15 @@ mv %{buildroot}%{_exec_prefix}/sbin/ceph-create-keys %{buildroot}%{_bindir}/
 %dir %{python3_sitelib}/ceph_node_proxy
 %{python3_sitelib}/ceph_node_proxy/*
 %{python3_sitelib}/ceph_node_proxy-*
+%if %{with manpages}
+%{_mandir}/man8/ceph-create-keys.8*
+%{_mandir}/man8/ceph-run.8*
+%{_mandir}/man8/crushtool.8*
+%{_mandir}/man8/osdmaptool.8*
+%{_mandir}/man8/monmaptool.8*
+%{_mandir}/man8/ceph-kvstore-tool.8*
+%{_mandir}/man8/ceph-immutable-object-cache.8*
+%endif
 
 %post base
 %systemd_post ceph.target ceph-crash.service ceph-exporter.service ceph-immutable-object-cache@.service ceph-immutable-object-cache.target
@@ -654,6 +999,9 @@ fi
 %attr(0700,cephadm,cephadm) %dir %{_sharedstatedir}/cephadm/.ssh
 %config(noreplace) %attr(0600,cephadm,cephadm) %{_sharedstatedir}/cephadm/.ssh/authorized_keys
 %{_sysusersdir}/cephadm.conf
+%if %{with manpages}
+%{_mandir}/man8/cephadm.8*
+%endif
 
 %preun common
 %systemd_preun ceph.target ceph-crash.service
@@ -740,11 +1088,38 @@ fi
 # cephfs-top (merged)
 %{python3_sitelib}/cephfs_top-*.egg-info
 %{_bindir}/cephfs-top
+%if %{with manpages}
+%{_mandir}/man8/ceph-authtool.8*
+%{_mandir}/man8/ceph-conf.8*
+%{_mandir}/man8/ceph-dencoder.8*
+%{_mandir}/man8/ceph-rbdnamer.8*
+%{_mandir}/man8/ceph-syn.8*
+%{_mandir}/man8/ceph-post-file.8*
+%{_mandir}/man8/ceph.8*
+%{_mandir}/man8/crushdiff.8*
+%{_mandir}/man8/mount.ceph.8*
+%{_mandir}/man8/rados.8*
+%{_mandir}/man8/radosgw-admin.8*
+%{_mandir}/man8/rbd.8*
+%{_mandir}/man8/rbdmap.8*
+%{_mandir}/man8/rbd-replay.8*
+%{_mandir}/man8/rbd-replay-many.8*
+%{_mandir}/man8/rbd-replay-prep.8*
+%{_mandir}/man8/rgw-orphan-list.8*
+%{_mandir}/man8/rgw-gap-list.8*
+%{_mandir}/man8/rgw-restore-bucket-index.8*
+%{_mandir}/man8/rbd-fuse.8*
+%{_mandir}/man8/rbd-nbd.8*
+%{_mandir}/man8/cephfs-top.8*
+%endif
 
 %if %{with cephfs_shell}
 %files -n cephfs-shell
 %{python3_sitelib}/cephfs_shell-*.egg-info
 %{_bindir}/cephfs-shell
+%if %{with manpages}
+%{_mandir}/man8/cephfs-shell.8*
+%endif
 %endif
 
 %pre common
@@ -773,6 +1148,10 @@ fi
 %{_bindir}/cephfs-mirror
 %{_unitdir}/cephfs-mirror@.service
 %{_unitdir}/cephfs-mirror.target
+%if %{with manpages}
+%{_mandir}/man8/ceph-mds.8*
+%{_mandir}/man8/cephfs-mirror.8*
+%endif
 
 %post mds
 %systemd_post ceph-mds@.service ceph-mds.target cephfs-mirror@.service cephfs-mirror.target
@@ -800,6 +1179,7 @@ fi
 %{_datadir}/ceph/mgr/mgr_module.*
 %{_datadir}/ceph/mgr/mgr_util.*
 %{_datadir}/ceph/mgr/object_format.*
+%{_datadir}/ceph/mgr/cherrypy_mgr.py
 %{_unitdir}/ceph-mgr@.service
 %{_unitdir}/ceph-mgr.target
 %attr(750,ceph,ceph) %dir %{_localstatedir}/lib/ceph/mgr
@@ -815,6 +1195,7 @@ fi
 %{_datadir}/ceph/mgr/mds_autoscaler
 %{_datadir}/ceph/mgr/mirroring
 %{_datadir}/ceph/mgr/nfs
+%{_datadir}/ceph/mgr/nvmeof
 %{_datadir}/ceph/mgr/orchestrator
 %{_datadir}/ceph/mgr/osd_perf_query
 %{_datadir}/ceph/mgr/osd_support
@@ -872,6 +1253,9 @@ fi
 %{_unitdir}/ceph-mon@.service
 %{_unitdir}/ceph-mon.target
 %attr(750,ceph,ceph) %dir %{_localstatedir}/lib/ceph/mon
+%if %{with manpages}
+%{_mandir}/man8/ceph-mon.8*
+%endif
 
 %post mon
 %systemd_post ceph-mon@.service ceph-mon.target
@@ -898,11 +1282,18 @@ fi
 %{_sbindir}/mount.fuse.ceph
 %{_unitdir}/ceph-fuse@.service
 %{_unitdir}/ceph-fuse.target
+%if %{with manpages}
+%{_mandir}/man8/ceph-fuse.8*
+%{_mandir}/man8/mount.fuse.ceph.8*
+%endif
 
 %files -n rbd-mirror
 %{_bindir}/rbd-mirror
 %{_unitdir}/ceph-rbd-mirror@.service
 %{_unitdir}/ceph-rbd-mirror.target
+%if %{with manpages}
+%{_mandir}/man8/rbd-mirror.8*
+%endif
 
 %post -n rbd-mirror
 %systemd_post ceph-rbd-mirror@.service ceph-rbd-mirror.target
@@ -939,6 +1330,11 @@ fi
 %if %{with lttng}
 %{_libdir}/librgw_op_tp.so.*
 %{_libdir}/librgw_rados_tp.so.*
+%endif
+%if %{with manpages}
+%{_mandir}/man8/ceph-diff-sorted.8*
+%{_mandir}/man8/radosgw.8*
+%{_mandir}/man8/rgw-policy-check.8*
 %endif
 
 %post radosgw
@@ -979,6 +1375,13 @@ fi
 %{python3_sitelib}/ceph_volume/*
 %{python3_sitelib}/ceph_volume-*
 %{_unitdir}/ceph-volume@.service
+%if %{with manpages}
+%{_mandir}/man8/ceph-clsinfo.8*
+%{_mandir}/man8/ceph-osd.8*
+%{_mandir}/man8/ceph-bluestore-tool.8*
+%{_mandir}/man8/ceph-volume.8*
+%{_mandir}/man8/ceph-volume-systemd.8*
+%endif
 
 %post osd
 %systemd_post ceph-osd@.service ceph-osd.target ceph-volume@.service
@@ -1000,6 +1403,11 @@ if [ $1 -ge 1 ] ; then
     /usr/bin/systemctl try-restart ceph-osd@.service ceph-volume@.service > /dev/null 2>&1 || :
   fi
 fi
+
+%if %{with crimson}
+%files crimson-osd
+%{_bindir}/crimson-osd
+%endif
 
 %if %{with ocf}
 
@@ -1052,6 +1460,9 @@ fi
 %{_includedir}/cephfs/libcephfs.h
 %{_includedir}/cephfs/ceph_ll_client.h
 %{_includedir}/cephfs/types.h
+%{_includedir}/cephfs/dump.h
+%{_includedir}/cephfs/json.h
+%{_includedir}/cephfs/keys_and_values.h
 %dir %{_includedir}/cephfs/metrics
 %{_includedir}/cephfs/metrics/Types.h
 %{_libdir}/libcephfs.so
@@ -1068,22 +1479,25 @@ fi
 %{_includedir}/radosstriper/libradosstriper.hpp
 %{_libdir}/libradosstriper.so
 %endif
+%if %{with manpages}
+%{_mandir}/man8/librados-config.8*
+%endif
 
 %files -n python-rados
 %{python3_sitearch}/rados.cpython*.so
-%{python3_sitearch}/rados-*.egg-info
+%{python3_sitearch}/rados-*.dist-info
 
 %files -n python-rgw
 %{python3_sitearch}/rgw.cpython*.so
-%{python3_sitearch}/rgw-*.egg-info
+%{python3_sitearch}/rgw-*.dist-info
 
 %files -n python-rbd
 %{python3_sitearch}/rbd.cpython*.so
-%{python3_sitearch}/rbd-*.egg-info
+%{python3_sitearch}/rbd-*.dist-info
 
 %files -n python-cephfs
 %{python3_sitearch}/cephfs.cpython*.so
-%{python3_sitearch}/cephfs-*.egg-info
+%{python3_sitearch}/cephfs-*.dist-info
 
 %files -n python-ceph-common
 %{python3_sitelib}/ceph
@@ -1098,6 +1512,7 @@ fi
 %{_bindir}/ceph_bench_log
 %{_bindir}/ceph_multi_stress_watch
 %{_bindir}/ceph_erasure_code_benchmark
+%{_bindir}/ceph_ec_consistency_checker
 %{_bindir}/ceph_omapbench
 %{_bindir}/ceph_objectstore_bench
 %{_bindir}/ceph_perf_objectstore
@@ -1115,8 +1530,16 @@ fi
 %{_bindir}/ceph-debugpack
 %{_bindir}/ceph-dedup-tool
 %{_bindir}/ceph-dedup-daemon
+%if %{with crimson}
+%{_bindir}/crimson-objectstore-tool
+%{_bindir}/crimson-store-bench
+%{_bindir}/crimson-store-nbd
+%endif
 %dir %{_libdir}/ceph
 %{_libdir}/ceph/ceph-monstore-update-crush.sh
+%if %{with manpages}
+%{_mandir}/man8/ceph-debugpack.8*
+%endif
 %endif
 
 %files monitoring

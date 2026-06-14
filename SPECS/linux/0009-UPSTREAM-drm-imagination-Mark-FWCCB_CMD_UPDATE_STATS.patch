@@ -1,8 +1,8 @@
-From b3a4537106b2ae5fd34d1dc4b093cbceff72b418 Mon Sep 17 00:00:00 2001
+From 95b245031f0856b75f157d12a7b6d8e41544204a Mon Sep 17 00:00:00 2001
 From: Matt Coster <matt.coster@imgtec.com>
 Date: Fri, 6 Feb 2026 16:02:13 +0000
-Subject: [PATCH 009/189] UPSTREAM: drm/imagination: Mark
- FWCCB_CMD_UPDATE_STATS as known
+Subject: [RUYI PATCH] UPSTREAM: drm/imagination: Mark FWCCB_CMD_UPDATE_STATS
+ as known
 
 Suppress the "unknown type" warning when processing a FWCCB command of
 type CMD_UPDATE_STATS which is known but (currently) unused.

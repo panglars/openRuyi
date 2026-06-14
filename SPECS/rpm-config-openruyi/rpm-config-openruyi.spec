@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Zheng Junjie <zhengjunjie@iscas.ac.cn>
 # SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
+# SPDX-FileContributor: panglars <panghao.riscv@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -16,7 +17,6 @@ License:        GPL-2.0-or-later
 URL:            https://git.openruyi.cn/openruyi/openruyi-repo
 BuildArch:      noarch
 
-BuildRequires:  gzip
 #!BuildIgnore:  rpm-config-openruyi
 
 Provides:       rpm-config
@@ -35,6 +35,7 @@ kernel.attr
 kmp.attr
 macros
 macros.buildsystem
+macros.completions
 macros.ldconfig
 macros.sbat
 macros.vendor
@@ -77,4 +78,4 @@ install -p -m 644 -t %{buildroot}%{_rpmconfigdir}/macros.d macros.*
 %{_rpmconfigdir}/find-supplements.ksyms
 
 %changelog
-%{?autochangelog}
+%autochangelog

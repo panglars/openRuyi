@@ -108,9 +108,6 @@ libraries can be used by python.
 Summary:        Perl bindings for %{name}
 BuildRequires:  coreutils
 BuildRequires:  findutils
-BuildRequires:  make
-BuildRequires:  perl-devel
-BuildRequires:  perl-macros
 BuildRequires:  perl(XML::Parser)
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       %{name}-perl = %{version}-%{release}
@@ -157,7 +154,7 @@ ctest -V -E sce/test_sce_in_ds.sh
 
 %files devel
 %{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
+%{_libdir}/pkgconfig/libopenscap.pc
 %{_includedir}/*
 
 %changelog

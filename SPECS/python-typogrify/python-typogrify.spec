@@ -22,7 +22,7 @@ BuildOption(install):  -l %{srcname} +auto
 BuildRequires:  pyproject-rpm-macros
 BuildRequires:  pkgconfig(python3)
 # For check
-BuildRequires:  pytest
+BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(jinja2)
 BuildRequires:  python3dist(django)
 

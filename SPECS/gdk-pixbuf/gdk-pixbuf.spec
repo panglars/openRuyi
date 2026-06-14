@@ -2,18 +2,19 @@
 # SPDX-FileCopyrightText: (C) 2025 openRuyi Project Contributors
 # SPDX-FileContributor: Yafen Fang <yafen@iscas.ac.cn>
 # SPDX-FileContributor: misaka00251 <liuxin@iscas.ac.cn>
+# SPDX-FileContributor: yyjeqhc <jialin.oerv@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global glib_version 2.56.0
 
 Name:           gdk-pixbuf
-Version:        2.44.4
+Version:        2.44.6
 Release:        %autorelease
 Summary:        An image loading library
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/gdk-pixbuf
-#!RemoteAsset
+#!RemoteAsset:  sha256:140c2d0b899fcf853ee92b26373c9dc228dbcde0820a4246693f4328a27466fa
 Source0:        https://download.gnome.org/sources/gdk-pixbuf/2.44/gdk-pixbuf-%{version}.tar.xz
 BuildSystem:    meson
 
@@ -35,7 +36,7 @@ BuildRequires:  libxslt
 BuildRequires:  meson
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  shared-mime-info
-BuildRequires:  python3-docutils
+BuildRequires:  python3dist(docutils)
 
 %description
 gdk-pixbuf is an image loading library that can be extended by loadable
@@ -70,9 +71,6 @@ gdk-pixbuf-query-loaders --update-cache
 %transfiletriggerpostun -- %{_libdir}/gdk-pixbuf-2.0/2.10.0/loaders
 gdk-pixbuf-query-loaders --update-cache
 
-# TODO: Fix tests
-%check
-
 %files -f %{name}.lang
 %license COPYING
 %doc NEWS README.md
@@ -105,4 +103,4 @@ gdk-pixbuf-query-loaders --update-cache
 %{_datadir}/installed-tests
 
 %changelog
-%{?autochangelog}
+%autochangelog

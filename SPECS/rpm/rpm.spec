@@ -149,6 +149,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       rpm:%_bindir/rpmbuild
 Provides:       rpmbuild
 # build essentials
+Requires:       bash
 Requires:       binutils
 Requires:       bzip2
 Requires:       coreutils
@@ -174,7 +175,6 @@ Requires:       which
 Requires:       xz
 Requires:       debugedit
 Requires:       cpio
-Requires:       file
 
 %description    build
 If you want to build a rpm, you need this package. It provides rpmbuild

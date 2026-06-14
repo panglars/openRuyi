@@ -5,22 +5,24 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global crate_name wasip2
-%global full_version 1.0.2+wasi-0.2.9
+%global full_version 1.0.3+wasi-0.2.9
 %global pkgname wasip2-1.0
 
 Name:           rust-wasip2-1.0
-Version:        1.0.2
+Version:        1.0.3
 Release:        %autorelease
 Summary:        Rust crate "wasip2"
 License:        Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT
 URL:            https://github.com/bytecodealliance/wasi-rs
-#!RemoteAsset:  sha256:9517f9239f02c069db75e65f174b3da828fe5f5b945c4dd26bd25d89c03ebcf5
+#!RemoteAsset:  sha256:20064672db26d7cdc89c7798c48a0fdfac8213434a1186e5ef29fd560ae223d6
 Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
+BuildArch:      noarch
 BuildSystem:    rustcrates
 
 BuildRequires:  rust-rpm-macros
 
-Requires:       crate(wit-bindgen-0.51) >= 0.51.0
+Requires:       crate(wit-bindgen-0.57) >= 0.57.1
+Provides:       crate(wasip2) = %{version}
 Provides:       crate(%{pkgname})
 Provides:       crate(%{pkgname}/std)
 
@@ -39,7 +41,7 @@ This metapackage enables feature "alloc" for the Rust wasip2 crate, by pulling i
 %package     -n %{name}+bitflags
 Summary:        WASIp2 API bindings for Rust - feature "bitflags"
 Requires:       crate(%{pkgname})
-Requires:       crate(wit-bindgen-0.51/bitflags) >= 0.51.0
+Requires:       crate(wit-bindgen-0.57/bitflags) >= 0.57.1
 Provides:       crate(%{pkgname}/bitflags)
 
 %description -n %{name}+bitflags
@@ -69,7 +71,7 @@ Summary:        WASIp2 API bindings for Rust - feature "rustc-dep-of-std"
 Requires:       crate(%{pkgname})
 Requires:       crate(%{pkgname}/alloc)
 Requires:       crate(%{pkgname}/core)
-Requires:       crate(wit-bindgen-0.51/rustc-dep-of-std) >= 0.51.0
+Requires:       crate(wit-bindgen-0.57/rustc-dep-of-std) >= 0.57.1
 Provides:       crate(%{pkgname}/rustc-dep-of-std)
 
 %description -n %{name}+rustc-dep-of-std
@@ -79,4 +81,4 @@ This metapackage enables feature "rustc-dep-of-std" for the Rust wasip2 crate, b
 %{_datadir}/cargo/registry/%{crate_name}-%{version}/
 
 %changelog
-%{?autochangelog}
+%autochangelog

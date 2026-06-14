@@ -59,6 +59,10 @@ Source0:        https://github.com/systemd/systemd/archive/v%{version}/%{name}-%
 Source1:        systemd-user.pam
 BuildSystem:    meson
 
+# Enable only mandatory RV extensions in UEFI spec for systemd-boot
+# Picked from https://github.com/systemd/systemd/pull/42467
+Patch0:         0001-boot-enable-only-IMAFDCZicsrZifencei-for-RISC-V.patch
+
 BuildOption(conf):  -Dmode=release
 BuildOption(conf):  -Dsbat-distro-url='%{_vendor_url}'
 BuildOption(conf):  -Drc-local=/etc/rc.d/rc.local
@@ -433,6 +437,7 @@ This package provide mount.ddi and systemd-dissect.
 
 %package     -n kernel-install
 Summary:        This package provides kernel-install tool
+Requires:       kmod
 
 %description -n kernel-install
 This package provides kernel-install tool
@@ -1527,6 +1532,8 @@ fi
 %{_datadir}/zsh/site-functions/_networkctl
 %{pkgdir}/system/systemd-networkd.service
 %{pkgdir}/system/systemd-networkd.socket
+%{pkgdir}/system/systemd-network-generator.service
+%{pkgdir}/system/systemd-networkd-resolve-hook.socket
 %{pkgdir}/system/systemd-networkd-wait-online.service
 
 %files networkd-defaults

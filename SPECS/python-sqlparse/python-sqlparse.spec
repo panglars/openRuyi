@@ -7,12 +7,12 @@
 %global srcname sqlparse
 
 Name:           python-%{srcname}
-Version:        0.5.3
+Version:        0.5.5
 Release:        %autorelease
 Summary:        Non-validating SQL parser
 License:        BSD-3-Clause
 URL:            https://github.com/andialbrecht/sqlparse
-#!RemoteAsset
+#!RemoteAsset:  sha256:e20d4a9b0b8585fdf63b10d30066c7c94c5d7a7ec47c889a2d83a3caa93ff28e
 Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    pyproject
@@ -23,7 +23,7 @@ BuildRequires:  pyproject-rpm-macros
 BuildRequires:  pkgconfig(python3)
 BuildRequires:  python3dist(pytest)
 
-Provides:       python3-%{srcname}
+Provides:       python3-%{srcname} = %{version}-%{release}
 %python_provide python3-%{srcname}
 
 %description
@@ -33,7 +33,7 @@ provides support for parsing, splitting and formatting SQL statements.
 %generate_buildrequires
 %pyproject_buildrequires
 
-%check
+%check -a
 %pytest -v tests
 
 %files -f %{pyproject_files}
@@ -41,4 +41,4 @@ provides support for parsing, splitting and formatting SQL statements.
 %{_bindir}/sqlformat
 
 %changelog
-%{?autochangelog}
+%autochangelog

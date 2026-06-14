@@ -18,6 +18,9 @@ VCS:            git:https://github.com/scikit-learn/scikit-learn.git
 Source:         https://files.pythonhosted.org/packages/source/s/%{srcname}/%{pypi_name}-%{version}.tar.gz
 BuildSystem:    pyproject
 
+# Allow repository-provided meson-python 0.19.x.
+Patch2000:         2000-relax-meson-python-upper-bound.patch
+
 BuildOption(install):  -l sklearn
 BuildOption(check):  -e "sklearn.*.tests*" -e "sklearn.tests*" -e "sklearn.conftest" -e "sklearn.externals.array_api_compat.cupy*" -e "sklearn.externals.array_api_compat.dask*"
 
@@ -37,6 +40,7 @@ Requires:       python3dist(joblib)
 Requires:       python3dist(threadpoolctl)
 
 Provides:       python3-%{srcname} = %{version}-%{release}
+Provides:       python3-%{srcname}%{?_isa} = %{version}-%{release}
 %python_provide python3-%{srcname}
 
 %description
@@ -56,8 +60,8 @@ sed -i 's/"scipy>=1.10.0,<1.17.0"/"scipy>=1.10.0"/' pyproject.toml
 %pyproject_buildrequires -p
 
 %files -f %{pyproject_files}
-%license COPYING
 %doc README.rst
+%license COPYING
 
 %changelog
 %autochangelog

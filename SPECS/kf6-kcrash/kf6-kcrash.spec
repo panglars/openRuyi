@@ -11,16 +11,18 @@
 %{!?_kf6_version: %global _kf6_version %{version}}
 
 Name:           kf6-kcrash
-Version:        6.22.0
+Version:        6.26.0
 Release:        %autorelease
 Summary:        An application crash handler
 License:        LGPL-2.1-or-later
 URL:            https://www.kde.org
 VCS:            git:https://invent.kde.org/frameworks/kcrash
-#!RemoteAsset
-Source:         https://download.kde.org/stable/frameworks/6.22/%{rname}-%{version}.tar.xz
+#!RemoteAsset:  sha256:d05d93863a745ce0d4ab8ccff684a84a813ee4cbcc68c9c7a5175107b107e931
+Source:         https://download.kde.org/stable/frameworks/6.26/%{rname}-%{version}.tar.xz
+BuildSystem:    cmake
 
-BuildRequires:  fdupes
+BuildOption(conf):  -DBUILD_TESTING=OFF
+
 BuildRequires:  kf6-extra-cmake-modules >= %{_kf6_version}
 BuildRequires:  pkgconfig
 BuildRequires:  cmake(KF6CoreAddons) >= %{_kf6_version}
@@ -46,19 +48,6 @@ Requires:       cmake(Qt6Core) >= %{qt6_version}
 KCrash provides support for intercepting and handling application crashes.
 Development files.
 
-%prep
-%autosetup -p1 -n %{rname}-%{version}
-
-%build
-%cmake_kf6
-
-%kf6_build
-
-%install
-%kf6_install
-
-%fdupes %{buildroot}
-
 %files
 %license LICENSES/*
 %doc README*
@@ -72,4 +61,4 @@ Development files.
 %{_kf6_libdir}/libKF6Crash.so
 
 %changelog
-%{?autochangelog}
+%autochangelog

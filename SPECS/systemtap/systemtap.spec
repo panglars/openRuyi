@@ -10,16 +10,14 @@
 %bcond dyninst 0
 
 Name:           systemtap
-Version:        5.3
+Version:        5.5
 Release:        %autorelease
 Summary:        Programmable system-wide instrumentation system
 License:        GPL-2.0-or-later
 URL:            https://sourceware.org/systemtap/
 VCS:            git:https://sourceware.org/git/systemtap.git
-#!RemoteAsset
+#!RemoteAsset:  sha256:980e58887a284097b9d4c6ae6382b75787573131c27e3875c0fc94bceb8c61a8
 Source0:        https://sourceware.org/%{name}/ftp/releases/%{name}-%{version}.tar.gz
-#!RemoteAsset
-Source1:        https://sourceware.org/%{name}/ftp/releases/%{name}-%{version}.tar.gz.asc
 BuildSystem:    autotools
 
 BuildOption(conf):  --disable-docs
@@ -44,7 +42,7 @@ BuildRequires:  sqlite-devel
 BuildRequires:  pkgconfig(systemd)
 BuildRequires:  python3
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
+BuildRequires:  python3dist(setuptools)
 
 Requires:       %{name}-client = %{version}-%{release}
 Requires:       %{name}-devel = %{version}-%{release}
@@ -89,7 +87,6 @@ subpackage instead.
 
 %package        server
 Summary:        Instrumentation System Server
-BuildRequires:  pkgconfig(nss)
 %if %{with avahi}
 BuildRequires:  avahi-devel
 %endif
@@ -148,7 +145,7 @@ instrumentation compiled into userspace programs.
 Summary:        Static probe support dtrace tool
 License:        GPL-2.0-or-later AND CC0-1.0
 Provides:       dtrace = %{version}-%{release}
-Requires:       python3-pyparsing
+Requires:       python3dist(pyparsing)
 
 %description    sdt-dtrace
 This package includes the dtrace-compatibility preprocessor
@@ -325,4 +322,4 @@ install -D -m 644 macros.systemtap %{buildroot}%{_rpmmacrodir}/macros.systemtap
 %{_mandir}/man1/dtrace.1*
 
 %changelog
-%{?autochangelog}
+%autochangelog

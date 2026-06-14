@@ -45,31 +45,33 @@
   /usr/lib/rpm/brp-compress
 
 Name:           go
-Version:        1.25.8
+Version:        1.26.4
 Release:        %autorelease
 Summary:        The Go Programming Language toolchain
 License:        BSD-3-Clause
 URL:            https://go.dev/
 VCS:            git:https://github.com/golang/go
-#!RemoteAsset
+#!RemoteAsset:  sha256:4f668a32fbfc1132e6a881fb968c2f1dada631492a339211735fbb255a42602d
 Source0:        https://go.dev/dl/%{name}%{version}.src.tar.gz
-%if %{with bootstrap}
-#!RemoteAsset
-Source1:        https://go.dev/dl/%{name}%{version}.linux-%{gohostarch}.tar.gz
-%endif
-
-# https://go-review.googlesource.com/c/go/+/732560
-Patch1:	0001-crypto-sha1-provide-optimised-assembly-for-riscv64.patch
+#!RemoteAsset:  sha256:1153d3d50e0ac764b447adfe05c2bcf08e889d42a02e0fe0259bd47f6733ad7f
+Source1:        https://go.dev/dl/%{name}%{version}.linux-amd64.tar.gz
+#!RemoteAsset:  sha256:2b9ba137baaa3031fd74330cb36ab54c5abe380867ca9fbab7c552f3db740555
+Source2:        https://go.dev/dl/%{name}%{version}.linux-riscv64.tar.gz
 
 # Bootstrap from a pre-existing Go compiler.
 %if %{without bootstrap}
 BuildRequires:  go
 %endif
-BuildRequires:  gcc, make
+BuildRequires:  gcc
+BuildRequires:  make
 
 Provides:       golang = %{version}-%{release}
 Recommends:     %{name}-cshared = %{version}-%{release}
 Requires:       glibc
+
+%patchlist
+# https://go-review.googlesource.com/c/go/+/732560
+0001-crypto-sha1-provide-optimised-assembly-for-riscv64.patch
 
 %description
 The Go Programming Language. This package contains the compiler, tools,
@@ -112,7 +114,12 @@ Contains the Go standard library pre-compiled with race detector support.
 
 %if %{with bootstrap}
 mkdir -p %{_builddir}/%{name}-bootstrap
+%ifarch x86_64
 tar -xf %{SOURCE1} -C %{_builddir}/%{name}-bootstrap --strip-components=1
+%endif
+%ifarch riscv64
+tar -xf %{SOURCE2} -C %{_builddir}/%{name}-bootstrap --strip-components=1
+%endif
 %endif
 
 %build
@@ -212,4 +219,4 @@ popd
 %endif
 
 %changelog
-%{?autochangelog}
+%autochangelog

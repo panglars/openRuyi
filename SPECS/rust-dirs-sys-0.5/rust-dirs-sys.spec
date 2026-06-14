@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (C) 2026 Institute of Software, Chinese Academy of Sciences (ISCAS)
 # SPDX-FileCopyrightText: (C) 2026 openRuyi Project Contributors
 # SPDX-FileContributor: yyjeqhc <jialin.oerv@isrc.iscas.ac.cn>
+# SPDX-FileContributor: panglars <panghao.riscv@isrc.iscas.ac.cn>
 #
 # SPDX-License-Identifier: MulanPSL-2.0
 
@@ -21,9 +22,9 @@ BuildSystem:    rustcrates
 
 BuildRequires:  rust-rpm-macros
 
-Requires:       crate(libc-0.2/default) >= 0.2.0
+Requires:       crate(libc-0.2/default) >= 0.2.186
 Requires:       crate(option-ext-0.2/default) >= 0.2.0
-Requires:       crate(redox-users-0.5) >= 0.5.0
+Requires:       crate(redox-users-0.5) >= 0.5.2
 Requires:       crate(windows-sys-0.59/default) >= 0.59.0
 Requires:       crate(windows-sys-0.59/win32-foundation) >= 0.59.0
 Requires:       crate(windows-sys-0.59/win32-globalization) >= 0.59.0

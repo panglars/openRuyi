@@ -5,27 +5,27 @@
 # SPDX-License-Identifier: MulanPSL-2.0
 
 %global crate_name nix
-%global full_version 0.31.1
+%global full_version 0.31.2
 %global pkgname nix-0.31
 
 Name:           rust-nix-0.31
-Version:        0.31.1
+Version:        0.31.2
 Release:        %autorelease
 Summary:        Rust crate "nix"
 License:        MIT
 URL:            https://github.com/nix-rust/nix
-#!RemoteAsset:  sha256:225e7cfe711e0ba79a68baeddb2982723e4235247aefce1482f2f16c27865b66
+#!RemoteAsset:  sha256:5d6d0705320c1e6ba1d912b5e37cf18071b6c2e9b7fa8215a1e8a7651966f5d3
 Source:         https://crates.io/api/v1/crates/%{crate_name}/%{full_version}/download#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    rustcrates
 
 BuildRequires:  rust-rpm-macros
 
-Requires:       crate(bitflags-2.0/default) >= 2.3.3
+Requires:       crate(bitflags-2.0/default) >= 2.11.1
 Requires:       crate(cfg-aliases-0.2/default) >= 0.2.1
-Requires:       crate(cfg-if-1.0/default) >= 1.0.0
-Requires:       crate(libc-0.2/default) >= 0.2.180
-Requires:       crate(libc-0.2/extra-traits) >= 0.2.180
+Requires:       crate(cfg-if-1.0/default) >= 1.0.4
+Requires:       crate(libc-0.2/default) >= 0.2.186
+Requires:       crate(libc-0.2/extra-traits) >= 0.2.186
 Provides:       crate(nix) = %{version}
 Provides:       crate(%{pkgname})
 Provides:       crate(%{pkgname}/acct)

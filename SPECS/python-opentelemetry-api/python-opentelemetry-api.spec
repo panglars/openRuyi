@@ -8,13 +8,13 @@
 %global pypi_name opentelemetry_api
 
 Name:           python-%{srcname}
-Version:        1.41.0
+Version:        1.42.1
 Release:        %autorelease
 Summary:        OpenTelemetry Python API
 License:        Apache-2.0
 URL:            https://github.com/open-telemetry/opentelemetry-python
 VCS:            git:https://github.com/open-telemetry/opentelemetry-python.git
-#!RemoteAsset:  sha256:9421d911326ec12dee8bc933f7839090cad7a3f13fcfb0f9e82f8174dc003c09
+#!RemoteAsset:  sha256:56c63bea9f77b62856be8c47600474acad853b2924b99b1687c4cb6297166716
 Source:         https://files.pythonhosted.org/packages/source/o/%{srcname}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    pyproject
@@ -44,8 +44,8 @@ sed -i 's/importlib-metadata >= 6.0, < 8.8.0/importlib-metadata >= 6.0/' pyproje
 %pyproject_buildrequires
 
 %files -f %{pyproject_files}
-%license LICENSE
 %doc README.rst
+%license LICENSE
 
 %changelog
 %autochangelog

@@ -13,7 +13,7 @@ Summary:        Higher-level library to access ELF files
 License:        GPL-3.0-or-later
 URL:            https://sourceware.org/elfutils/
 VCS:            git:https://sourceware.org/git/elfutils.git
-#!RemoteAsset
+#!RemoteAsset:  sha256:09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e
 Source0:        https://sourceware.org/elfutils/ftp/%{version}/%{name}-%{version}.tar.bz2
 BuildSystem:    autotools
 
@@ -104,6 +104,11 @@ The package is dummy.
 %conf -p
 autoreconf -fiv
 chmod a+x tests/run*.sh
+# This test may fail or be skipped when run in a chroot environment
+# due to differences in the host environment. Since this test is not
+# suitable for testing in a sandbox, it will be unconditionally
+# skipped directly.
+echo -e "#! /usr/bin/env bash\nexit 77;\n" > tests/run-backtrace-native-core.sh
 
 %install -a
 # remove unneeded files
@@ -157,7 +162,6 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/*@*
 %{_libdir}/libdw.a
 %{_libdir}/libdw.so
 %{_includedir}/dwarf.h
-%dir %{_includedir}/elfutils
 %{_includedir}/elfutils/libdw.h
 %{_includedir}/elfutils/libdwelf.h
 %{_includedir}/elfutils/libdwfl.h
@@ -202,4 +206,4 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/*@*
 %{_mandir}/man7/debuginfod-client-config.7*
 
 %changelog
-%{?autochangelog}
+%autochangelog

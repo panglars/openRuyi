@@ -1,7 +1,7 @@
-From 4e1b644b3b9bb6b6b864fe9f047575549b7d8811 Mon Sep 17 00:00:00 2001
+From ce0cfe6521836f8d1bff1dbb1dd784f8dbe2f0f1 Mon Sep 17 00:00:00 2001
 From: Miguel Ojeda <ojeda@kernel.org>
 Date: Wed, 29 Oct 2025 19:19:40 +0100
-Subject: [PATCH 018/369] UPSTREAM: rust: pwm: Fix broken intra-doc link
+Subject: [RUYI PATCH] UPSTREAM: rust: pwm: Fix broken intra-doc link
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

@@ -7,12 +7,12 @@
 %global srcname distlib
 
 Name:           python-%{srcname}
-Version:        0.3.7
+Version:        0.4.0
 Release:        %autorelease
 Summary:        Distribution utilities
 License:        Python-2.0
 URL:            https://github.com/pypa/distlib
-#!RemoteAsset
+#!RemoteAsset:  sha256:feec40075be03a04501a973d81f633735b4b69f98b05450592310c0f401a4e0d
 Source0:        https://files.pythonhosted.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    pyproject
@@ -22,7 +22,7 @@ BuildOption(install):  -l %{srcname} +auto
 BuildRequires:  pyproject-rpm-macros
 BuildRequires:  pkgconfig(python3)
 
-Provides:       python3-%{srcname}
+Provides:       python3-%{srcname} = %{version}-%{release}
 %python_provide python3-%{srcname}
 
 %description
@@ -40,4 +40,4 @@ rm distlib/*.exe
 %doc README*
 
 %changelog
-%{?autochangelog}
+%autochangelog
